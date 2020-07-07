@@ -116,8 +116,34 @@ function Display(){
             </div>)
     }
 
+    const [searchValue, setsearchValue] = useState("")
+
+    function settingsearchValue(event){
+        setsearchValue(event.target.value)
+    }
+
+    function findProjects(){
+        console.log("findproject")
+    }
+
     return(
         <div><Navbar />
+        <div className="search">
+            <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
+            <img src="/search.png" style={{
+                    width: '48px', 
+                    height: '48px',
+                    marginRight: '20px',
+                    cursor: "pointer"
+                    }} className="searchbutton"
+                onClick={findProjects}
+            />
+            <select id="searchtype">
+                <option value="tags">tags</option>
+                <option value="title">title</option>
+                <option value="description">description</option>
+            </select>
+        </div>
         {chosenOne === "nothing" ? <Displayprop /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
         Description= {chosenOne.Description}
