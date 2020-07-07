@@ -37,14 +37,21 @@ a {
 
 #searchtype {
     -moz-appearance:none !important;
+    padding: 15px;
     background-color: #cad2c5;
-    color: #354f52;
+    color: #2f3e46;
     border: none;
+    font-weight: bold;
+    border-radius: 12px;
 }
 
 option {
     background-color: #cad2c5;
-    color: #354f52;
+    color: #2f3e46;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+
 }
 
 /*.navbar {
@@ -67,7 +74,7 @@ option {
     border: none;
     border-radius: 12px;
     margin: 20px;
-    margin-top: 40px;
+    margin-top: 80px;
     z-index: 0;
 }
 

@@ -117,19 +117,48 @@ function Display(){
     }
 
     const [searchValue, setsearchValue] = useState("")
+    const [searchOption, setsearchOption] = useState("title")
 
     function settingsearchValue(event){
         setsearchValue(event.target.value)
     }
 
+    function settingsearchOption(event){
+        setsearchOption(event.target.value)
+        alert(event.target.value)
+    }
+
     function findProjects(){
-        console.log("findproject")
+        alert(searchOption)
+        if(searchOption === "title"){
+            const results = newTestArray.filter(one => {return one.Project_Title.includes(searchValue)})
+            console.log(results)
+            if(newTestArray[0].Project_Title.includes(searchValue)){
+                alert("yes it does")
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
+        if(searchOption === "tags"){
+            const results = newTestArray.filter(one => {return one.Categories.includes(searchValue)})
+            console.log(results)
+            if(newTestArray[0].Project_Title.includes(searchValue)){
+                alert("yes it does")
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
     }
 
     return(
         <div><Navbar />
         <div className="search">
             <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
+            <select id="searchtype">
+                <option onClick={settingsearchOption} value="tags">tags</option>
+                <option onClick={settingsearchOption} value="title">title</option>
+                <option onClick={settingsearchOption} value="description">description</option>
+            </select>
             <img src="/search.png" style={{
                     width: '48px', 
                     height: '48px',
@@ -138,11 +167,6 @@ function Display(){
                     }} className="searchbutton"
                 onClick={findProjects}
             />
-            <select id="searchtype">
-                <option value="tags">tags</option>
-                <option value="title">title</option>
-                <option value="description">description</option>
-            </select>
         </div>
         {chosenOne === "nothing" ? <Displayprop /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
