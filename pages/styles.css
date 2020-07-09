@@ -43,6 +43,7 @@ a {
     border: none;
     font-weight: bold;
     border-radius: 12px;
+    margin: 0;
 }
 
 option {

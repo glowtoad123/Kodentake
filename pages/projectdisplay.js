@@ -117,33 +117,53 @@ function Display(){
     }
 
     const [searchValue, setsearchValue] = useState("")
-    const [searchOption, setsearchOption] = useState("title")
+    const [searchTitleList, setsearchTitleList] = useState([])
+    const [searchTagsList, setsearchTagsList] = useState([])
+    const [searchDescriptionList, setsearchDescriptionList] = useState([])
 
     function settingsearchValue(event){
         setsearchValue(event.target.value)
     }
 
-    function settingsearchOption(event){
-        setsearchOption(event.target.value)
-        alert(event.target.value)
+    function settingsearchList(event){
+        var selection = document.getElementById("searchtype")
+        if(selection.value === "title"){
+            setsearchTitleList(none => {return [...none, searchValue]})
+        }
+        if(selection.value === "tags"){
+            setsearchTagsList(none => {return [...none, searchValue]})
+        }
+        if(selection.value === "description"){
+            setsearchDescriptionList(none => {return [...none, searchValue]})
+        }
     }
 
     function findProjects(){
-        alert(searchOption)
-        if(searchOption === "title"){
+        var selection = document.getElementById("searchtype")
+        alert(selection.value)
+        if(selection.value === "title"){
             const results = newTestArray.filter(one => {return one.Project_Title.includes(searchValue)})
             console.log(results)
-            if(newTestArray[0].Project_Title.includes(searchValue)){
+            if(results){
                 alert("yes it does")
             } else {
                 alert("no it does not contain " + searchValue)
             }
         }
-        if(searchOption === "tags"){
+        if(selection.value === "tags"){
             const results = newTestArray.filter(one => {return one.Categories.includes(searchValue)})
             console.log(results)
-            if(newTestArray[0].Project_Title.includes(searchValue)){
-                alert("yes it does")
+            if(results){
+                alert("yes it does contain that tag")
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
+        if(selection.value === "description"){
+            const results = newTestArray.filter(one => {return one.Description.includes(searchValue)})
+            console.log(results)
+            if(results.length !== 0){
+                alert("yes it does contain that tag")
             } else {
                 alert("no it does not contain " + searchValue)
             }
@@ -154,19 +174,28 @@ function Display(){
         <div><Navbar />
         <div className="search">
             <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
-            <select id="searchtype">
-                <option onClick={settingsearchOption} value="tags">tags</option>
-                <option onClick={settingsearchOption} value="title">title</option>
-                <option onClick={settingsearchOption} value="description">description</option>
-            </select>
+            <img src="/plus.svg" style={{
+                    width: '24px', 
+                    height: '24px',
+                    marginRight: '5px',
+                    cursor: "pointer"
+                    }} className="searchbutton"
+                onClick={settingsearchList}
+            />
             <img src="/search.png" style={{
-                    width: '48px', 
-                    height: '48px',
-                    marginRight: '20px',
+                    width: '24px', 
+                    height: '24px',
+                    marginRight: '5x',
                     cursor: "pointer"
                     }} className="searchbutton"
                 onClick={findProjects}
             />
+            <select id="searchtype">
+                <option id="1" value="tags">tags</option>
+                <option id="2" value="title">title</option>
+                <option id="3" value="description">description</option>
+            </select>
+
         </div>
         {chosenOne === "nothing" ? <Displayprop /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
