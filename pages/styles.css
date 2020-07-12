@@ -46,6 +46,10 @@ a {
     margin: 0;
 }
 
+.searchdiv {
+    background-color: #cad2c5;
+}
+
 option {
     background-color: #cad2c5;
     color: #2f3e46;

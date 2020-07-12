@@ -142,7 +142,10 @@ function Display(){
         var selection = document.getElementById("searchtype")
         alert(selection.value)
         if(selection.value === "title"){
-            const results = newTestArray.filter(one => {return one.Project_Title.includes(searchValue)})
+            //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
+            //const results = searchTitleList.filter(one => newTestArray.map(each => each.Project_Title.includes(one)))
+            //newTestArray(current => searchTitleList.filter(one => current.Project_Title.includes(one)))
+            const results = searchTitleList.map(one => newTestArray.filter(each => each.Project_Title.includes(one)))
             console.log(results)
             if(results){
                 alert("yes it does")
@@ -151,7 +154,7 @@ function Display(){
             }
         }
         if(selection.value === "tags"){
-            const results = newTestArray.filter(one => {return one.Categories.includes(searchValue)})
+            const results = newTestArray.filter(one => {return one.Categories.includes(searchTagsList)})
             console.log(results)
             if(results){
                 alert("yes it does contain that tag")
@@ -160,7 +163,7 @@ function Display(){
             }
         }
         if(selection.value === "description"){
-            const results = newTestArray.filter(one => {return one.Description.includes(searchValue)})
+            const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
             console.log(results)
             if(results.length !== 0){
                 alert("yes it does contain that tag")
@@ -195,7 +198,15 @@ function Display(){
                 <option id="2" value="title">title</option>
                 <option id="3" value="description">description</option>
             </select>
-
+            <br />
+            <div className="searchdiv">
+                <label className="searchLabel">Title search Values</label>
+                {searchTitleList.map(each => <Tag tag={each}/>)}
+                <label className="searchLabel">Tags search Values</label>
+                {searchTagsList.map(each => <Tag tag={each}/>)}
+                <label className="searchLabel">Description search Values</label>
+                {searchDescriptionList.map(each => <Tag tag={each}/>)}
+            </div>    
         </div>
         {chosenOne === "nothing" ? <Displayprop /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
