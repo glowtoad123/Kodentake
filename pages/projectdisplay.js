@@ -54,6 +54,67 @@ function Display(){
     console.log(taggies)
     console.log(newTestArray.Categories)
 
+    const [searchValue, setsearchValue] = useState("")
+    const [searchTitleList, setsearchTitleList] = useState([])
+    const [searchTagsList, setsearchTagsList] = useState([])
+    const [searchDescriptionList, setsearchDescriptionList] = useState([])
+    const [queriedList, setqueriedList] = useState([])
+
+    function settingsearchValue(event){
+        setsearchValue(event.target.value)
+    }
+
+    function settingsearchList(event){
+        var selection = document.getElementById("searchtype")
+        if(selection.value === "title"){
+            setsearchTitleList(none => {return [...none, searchValue]})
+        }
+        if(selection.value === "tags"){
+            setsearchTagsList(none => {return [...none, searchValue]})
+        }
+        if(selection.value === "description"){
+            setsearchDescriptionList(none => {return [...none, searchValue]})
+        }
+    }
+
+    function findProjects(){
+        var selection = document.getElementById("searchtype")
+        alert(selection.value)
+        if(selection.value === "title"){
+            //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
+            //const results = searchTitleList.filter(one => newTestArray.map(each => each.Project_Title.includes(one)))
+            //newTestArray(current => searchTitleList.filter(one => current.Project_Title.includes(one)))
+            const results = searchTitleList.map(one => newTestArray.filter(each => each.Project_Title.includes(one)))
+            console.log(results)
+            const allProjects = results.map(one => one.map(each => each))
+            localStorage.setItem('queriedProjects', JSON.stringify(allProjects))
+            if(results){
+                alert("yes it does")
+                setqueriedList(allProjects)
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
+        if(selection.value === "tags"){
+            const results = newTestArray.filter(one => {return one.Categories.includes(searchTagsList)})
+            console.log(results)
+            if(results){
+                alert("yes it does contain that tag")
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
+        if(selection.value === "description"){
+            const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
+            console.log(results)
+            if(results.length !== 0){
+                alert("yes it does contain that tag")
+            } else {
+                alert("no it does not contain " + searchValue)
+            }
+        }
+    }
+
     function Displayprop() {
         return(
 
@@ -71,6 +132,25 @@ function Display(){
             </div>)})
         )
     }
+
+    function Querieddisplay(){
+
+        const tagList = queriedList.map(one => one.map(current => current.Categories))
+
+        return(
+        queriedList.map((One, index) => {return One.map((Current, index) => {return (<div className="display" style={{width: '300px'}}>
+                <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
+                <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
+                <br />
+                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
+                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
+                <br />
+                <img className="creatorpic" src='/me.jpg' />
+                <p className="creatorname"><strong>{Current.Creator}</strong></p>
+                <br />
+                {tagList.map(each => each[index].map(eachone =>  <Tag tag={eachone}/>))}
+            </div>)})})
+    )}
 
     const [refid, setrefid] = useState("")
 
@@ -116,62 +196,9 @@ function Display(){
             </div>)
     }
 
-    const [searchValue, setsearchValue] = useState("")
-    const [searchTitleList, setsearchTitleList] = useState([])
-    const [searchTagsList, setsearchTagsList] = useState([])
-    const [searchDescriptionList, setsearchDescriptionList] = useState([])
 
-    function settingsearchValue(event){
-        setsearchValue(event.target.value)
-    }
 
-    function settingsearchList(event){
-        var selection = document.getElementById("searchtype")
-        if(selection.value === "title"){
-            setsearchTitleList(none => {return [...none, searchValue]})
-        }
-        if(selection.value === "tags"){
-            setsearchTagsList(none => {return [...none, searchValue]})
-        }
-        if(selection.value === "description"){
-            setsearchDescriptionList(none => {return [...none, searchValue]})
-        }
-    }
-
-    function findProjects(){
-        var selection = document.getElementById("searchtype")
-        alert(selection.value)
-        if(selection.value === "title"){
-            //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
-            //const results = searchTitleList.filter(one => newTestArray.map(each => each.Project_Title.includes(one)))
-            //newTestArray(current => searchTitleList.filter(one => current.Project_Title.includes(one)))
-            const results = searchTitleList.map(one => newTestArray.filter(each => each.Project_Title.includes(one)))
-            console.log(results)
-            if(results){
-                alert("yes it does")
-            } else {
-                alert("no it does not contain " + searchValue)
-            }
-        }
-        if(selection.value === "tags"){
-            const results = newTestArray.filter(one => {return one.Categories.includes(searchTagsList)})
-            console.log(results)
-            if(results){
-                alert("yes it does contain that tag")
-            } else {
-                alert("no it does not contain " + searchValue)
-            }
-        }
-        if(selection.value === "description"){
-            const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
-            console.log(results)
-            if(results.length !== 0){
-                alert("yes it does contain that tag")
-            } else {
-                alert("no it does not contain " + searchValue)
-            }
-        }
-    }
+    console.log(queriedList)
 
     return(
         <div><Navbar />
@@ -208,7 +235,7 @@ function Display(){
                 {searchDescriptionList.map(each => <Tag tag={each}/>)}
             </div>    
         </div>
-        {chosenOne === "nothing" ? <Displayprop /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
+        {chosenOne === "nothing" && queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 ? <Querieddisplay /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
         Description= {chosenOne.Description}
         Roadmap={chosenOne.Roadmap}
