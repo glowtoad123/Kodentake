@@ -7,8 +7,10 @@ import Navbar from './navbar'
 import Link from 'next/link'
 
 function Display(){
-    const [projectArray, setProjectArray] =  useState([])
+    const [projectArray, setProjectArray] =  useState("")
+    const testArray = []
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
+    const [page, setPage] = useState(false)
     const [chosenOne, setChosenOne] = useState("nothing")
 
     function choseOne(event){
@@ -17,6 +19,9 @@ function Display(){
             q.Match(q.Index("Project_Title"), event.target.innerText)
         )).then((ret, index) => {console.log(ret); setChosenOne(ret.data)})
     }
+
+    console.log(page)
+    console.log(chosenOne)
 
 
 
@@ -34,14 +39,20 @@ function Display(){
     }
 
 
-    projectArray.length == 0 && serverClient.query(
+    /*serverClient.query(
         q.Map(
             q.Paginate(q.Match(q.Index("projects"))),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data))})
+    ).then((ret, index) => {ret.data.map(one => {console.log(one.data); testArray.push(one.data); localStorage.setItem('projects', JSON.stringify(testArray));})})*/
+    
+    var newTestArray = JSON.parse(localStorage.getItem('projects'))
+    console.log(newTestArray)
+    const [tagNames, settagNames] = useState([])
 
-    const taggies = projectArray.map(project => project.Categories)
+    const taggies = newTestArray.map(current => current.Categories)
+    console.log(taggies)
+    console.log(newTestArray.Categories)
 
     const [searchValue, setsearchValue] = useState("")
     const [searchTitleList, setsearchTitleList] = useState([])
@@ -70,7 +81,7 @@ function Display(){
         var selection = document.getElementById("searchtype")
         alert(selection.value)
         if((searchValue.length > 0 && selection.value === "title") && (searchDescriptionList == 0 && searchTagsList == 0 && searchTitleList == 0)){
-            const results = projectArray.filter(project => {return project.Project_Title.includes(searchValue)})
+            const results = newTestArray.filter(one => {return one.Project_Title.includes(searchValue)})
         }
         /*if(selection.value === "title"){
             //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
@@ -87,7 +98,7 @@ function Display(){
                 alert("no it does not contain " + searchValue)
             }
         }*/
-        /*if(selection.value === "tags"){
+        if(selection.value === "tags"){
             const results = searchTagsList.map(one => newTestArray.filter(each => each.Categories.includes(one)))
             console.log(results[0])
             if(results){
@@ -97,7 +108,7 @@ function Display(){
             } else {
                 alert("no it does not contain " + searchValue)
             }
-        }*/
+        }
         /*if(selection.value === "description"){
             const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
             console.log(results)
@@ -112,15 +123,15 @@ function Display(){
     function Displayprop() {
         return(
 
-            projectArray.map((project, index) => {return (<div className="display" style={{width: '300px'}}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{project.Project_Title}</strong></h1>
-                <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
+            newTestArray.map((Current, index) => {const Categories = Current.Categories; return (<div className="display" style={{width: '300px'}}>
+                <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
+                <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
                 <br />
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
                 <img className="creatorpic" src='/me.jpg' />
-                <p className="creatorname"><strong>{project.Creator}</strong></p>
+                <p className="creatorname"><strong>{Current.Creator}</strong></p>
                 <br />
                 {taggies[index].map(each => <Tag tag={each}/>)}
             </div>)})
@@ -150,19 +161,15 @@ function Display(){
 
     function setRef(event){
         
-        refid.length == 0 && serverClient.query(
+        serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
-        )).then((ret, index) => {setrefid(ret.ref); console.log("refid: " + refid)})
+        )).then((ret, index) => {setrefid(ret.ref); console.log("ref: " + ret.ref.id); sessionStorage.setItem("ref", ret.ref.id)})
     }
 
-    const [username, setusername] = useState("")
-     useEffect(() => {
-        username.length == 0 && (setusername(sessionStorage.getItem("username")),
-            console.log(username))
-    })
-
-
+    const username = sessionStorage.getItem("username")
+    console.log(username)
+    console.log("refid: " + refid)
 
     function Userdisplay(props){
         return(
