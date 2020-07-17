@@ -57,20 +57,25 @@ function Display(){
         var selection = document.getElementById("searchtype")
         if(selection.value === "title"){
             setsearchTitleList(none => {return [...none, searchValue]})
+            setsearchValue("")
         }
         if(selection.value === "tags"){
             setsearchTagsList(none => {return [...none, searchValue]})
+            setsearchValue("")
         }
         if(selection.value === "description"){
             setsearchDescriptionList(none => {return [...none, searchValue]})
+            setsearchValue("")
         }
     }
+
 
     function findProjects(){
         var selection = document.getElementById("searchtype")
         alert(selection.value)
         if((searchValue.length > 0 && selection.value === "title") && (searchDescriptionList == 0 && searchTagsList == 0 && searchTitleList == 0)){
             const results = projectArray.filter(project => {return project.Project_Title.includes(searchValue)})
+            setqueriedList(results)
         }
         /*if(selection.value === "title"){
             //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
@@ -87,17 +92,42 @@ function Display(){
                 alert("no it does not contain " + searchValue)
             }
         }*/
-        /*if(selection.value === "tags"){
-            const results = searchTagsList.map(one => newTestArray.filter(each => each.Categories.includes(one)))
+
+
+        if(selection.value === "tags"){
+            const results = searchTagsList.map(one => projectArray.filter(each => each.Categories.includes(one)))
+            //results.sort((a, b) => a.length - b.length)
+            const finalSet = new Set()
+            const usedArray = []
+            const finalArray = results.map(queriedProjectLists => queriedProjectLists.filter(project => usedArray.push(project)))
+            console.log(usedArray.indexOf({
+                "Project_Title": "Codentake",
+                "Version_num": "0.02",
+                "Description": "A continuation of codetake using Nextjs",
+                "Categories": [
+                  "react",
+                  "Nextjs",
+                  "localStorage",
+                  "responsive",
+                  "SPA",
+                  "PWA",
+                  "hooks"
+                ],
+                "Changes": "Made the components into pages.",
+                "Roadmap": "to be hosted",
+                "Creator": ""
+              }))
+            console.log(results)
+            console.log(usedArray)
+            console.log(searchTagsList.map(one => finalSet.forEach(function(each){return each})))
             console.log(results[0])
             if(results){
                 alert("yes it does contain that tag")
                 setqueriedList(results[0])
-                localStorage.setItem('queriedProjects', JSON.stringify(results[0]))
             } else {
                 alert("no it does not contain " + searchValue)
             }
-        }*/
+        }
         /*if(selection.value === "description"){
             const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
             console.log(results)
@@ -129,37 +159,37 @@ function Display(){
 
     function Querieddisplay(){
 
-        const tagList = queriedList.map(one => one.map(current => current.Categories))
+        const tagList = queriedList.map(one => one.Categories)
 
         return(
-        queriedList.map((One, index) => {return One.map((Current, index) => {return (<div className="display" style={{width: '300px'}}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
-                <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
+        queriedList.map((project, index) => {return (<div className="display" style={{width: '300px'}}>
+                <h1 onClick={choseOne} className="displaytitle"><strong>{project.Project_Title}</strong></h1>
+                <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
                 <br />
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
                 <img className="creatorpic" src='/me.jpg' />
-                <p className="creatorname"><strong>{Current.Creator}</strong></p>
+                <p className="creatorname"><strong>{project.Creator}</strong></p>
                 <br />
-                {tagList.map(each => each[index].map(eachone =>  <Tag tag={eachone}/>))}
-            </div>)})})
+                {tagList[index].map(each => <Tag tag={each}/>)}
+            </div>)})
     )}
 
     const [refid, setrefid] = useState("")
 
     function setRef(event){
-        
-        refid.length == 0 && serverClient.query(
+        serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
-        )).then((ret, index) => {setrefid(ret.ref); console.log("refid: " + refid)})
+        )).then((ret, index) => {setrefid(ret.ref.id); sessionStorage.setItem("ref", ret.ref.id); console.log("refid: " + refid)})
     }
 
     const [username, setusername] = useState("")
      useEffect(() => {
         username.length == 0 && (setusername(sessionStorage.getItem("username")),
-            console.log(username))
+            console.log(username));
+        sessionStorage.setItem("dataCondition", false)
     })
 
 

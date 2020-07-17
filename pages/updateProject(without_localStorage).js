@@ -9,33 +9,42 @@ function Updateproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     
     const refid = sessionStorage.getItem("ref")
-    console.log("refid: " + refid)
     const username = sessionStorage.getItem("username")
     console.log(username)
+
+            serverClient.query(
+                q.Get(q.Ref(q.Collection('Projects'), refid))
+            )
+            .then((ret) => {
+                localStorage.setItem("currentProjectInfo", JSON.stringify({
+                    Project_Title: ret.data.Project_Title,
+                    Version_num: ret.data.Version_num,
+                    Description: ret.data.Description,
+                    Categories: ret.data.Categories,
+                    Changes: ret.data.Changes,
+                    Roadmap: ret.data.Roadmap,
+                    Creator: ret.data.Creator,
+                }))
+            })
+
+    var someData = JSON.parse(localStorage.getItem("currentProjectInfo"))
+
     const [projectData, setProjectData] = useState({
-        Project_Title: "",
-        Version_num: "",
-        Description: "",
-        Categories: [],
-        Changes: "",
-        Roadmap: "",
-        Creator: "",
+        Project_Title: someData.Project_Title,
+        Version_num: someData.Version_num,
+        Description: someData.Description,
+        Categories: someData.Categories,
+        Changes: someData.Changes,
+        Roadmap: someData.Roadmap,
+        Creator: someData.Creator,
     })
-    const [tagList, settagList] = useState([])
-    console.log(projectData)
-    const [dataCondition, setdataCondition] = useState(sessionStorage.getItem("dataCondition"))
-    dataCondition !== "true" && serverClient.query(
-            q.Get(q.Ref(q.Collection('Projects'), refid))
-        )
-        .then((ret) => {setProjectData(ret.data); setdataCondition("true"); settagList(ret.data.Categories); console.log(ret.data)})
-    
-    console.log(dataCondition)
     console.log(projectData.Categories)
 
     const {Project_Title, Version_num, Description, Categories, Changes, Roadmap} = projectData
     const [tagName, settagName] = useState("")
     //const [tagList, settagList] = useState(projectData.Categories)
     //const tagList = projectData.Categories
+    const [tagList, settagList] = useState(projectData.Categories)
         console.log(tagList)
     function settingData(event){
         const name = event.target.name
@@ -67,8 +76,8 @@ function Updateproject(){
             )
           )
           .then((ret) => console.log(ret))
-          setdataCondition(false)
-        //event.preventDefault()
+        event.preventDefault()
+        window.location.reload()
     }
 
     function removeTag(id){
@@ -82,7 +91,7 @@ function Updateproject(){
     console.log(tagList)
 
     return(
-        <div><Navbar /><form id={styles.npform} >
+        <div><Navbar /><form id={styles.npform} onSubmit={saveData}>
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
             <input className={styles.newProjectItem} onChange={settingData} name="Version_num"       value={Version_num}     placeholder=" Version_num"     id={styles.Version_num}      ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
@@ -97,7 +106,7 @@ function Updateproject(){
                 borderRadius: '6px'}}><strong>{current}</strong></p> )}</div>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Roadmap"           value={Roadmap}         placeholder=" Roadmap"         id={styles.Roadmap}          ></textarea>
-            <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
+            <button id={styles.submit} type="submit">Save</button>
         </form></div>
     )
 }
