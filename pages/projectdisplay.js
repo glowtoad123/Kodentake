@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import Updateproject from './updateProject'
 //import me from '/me.jpg'
 import faunadb, { query as q } from "faunadb"
 //import edit from '/edit.svg'
@@ -44,27 +43,17 @@ function Display(){
     const taggies = projectArray.map(project => project.Categories)
 
     const [searchValue, setsearchValue] = useState("")
-    const [searchTitleList, setsearchTitleList] = useState([])
     const [searchTagsList, setsearchTagsList] = useState([])
-    const [searchDescriptionList, setsearchDescriptionList] = useState([])
     const [queriedList, setqueriedList] = useState([])
 
     function settingsearchValue(event){
         setsearchValue(event.target.value)
     }
 
-    function settingsearchList(event){
+    function settingsearchList(){
         var selection = document.getElementById("searchtype")
-        if(selection.value === "title"){
-            setsearchTitleList(none => {return [...none, searchValue]})
-            setsearchValue("")
-        }
         if(selection.value === "tags"){
             setsearchTagsList(none => {return [...none, searchValue]})
-            setsearchValue("")
-        }
-        if(selection.value === "description"){
-            setsearchDescriptionList(none => {return [...none, searchValue]})
             setsearchValue("")
         }
     }
@@ -72,71 +61,33 @@ function Display(){
 
     function findProjects(){
         var selection = document.getElementById("searchtype")
-        alert(selection.value)
-        if((searchValue.length > 0 && selection.value === "title") && (searchDescriptionList == 0 && searchTagsList == 0 && searchTitleList == 0)){
+        if(selection.value === "title"){
             const results = projectArray.filter(project => {return project.Project_Title.includes(searchValue)})
-            setqueriedList(results)
-        }
-        /*if(selection.value === "title"){
-            //const results = newTestArray.filter(one => searchTitleList.map(each => one.Project_Title.includes(each)))
-            //const results = searchTitleList.filter(one => newTestArray.map(each => each.Project_Title.includes(one)))
-            //newTestArray(current => searchTitleList.filter(one => current.Project_Title.includes(one)))
-            const results = searchTitleList.map(one => newTestArray.filter(each => each.Project_Title.includes(one)))
-            console.log(results)
-            const allProjects = results.map(one => one.map(each => each))
-            localStorage.setItem('queriedProjects', JSON.stringify(allProjects))
-            if(results){
-                alert("yes it does")
-                setqueriedList(allProjects)
+            if(results.length > 0){
+                setqueriedList(results)
             } else {
-                alert("no it does not contain " + searchValue)
+                alert("none of the projects contain: " + searchValue)
             }
-        }*/
-
+        }
 
         if(selection.value === "tags"){
-            const results = searchTagsList.map(one => projectArray.filter(each => each.Categories.includes(one)))
-            //results.sort((a, b) => a.length - b.length)
-            const finalSet = new Set()
-            const usedArray = []
-            const finalArray = results.map(queriedProjectLists => queriedProjectLists.filter(project => usedArray.push(project)))
-            console.log(usedArray.indexOf({
-                "Project_Title": "Codentake",
-                "Version_num": "0.02",
-                "Description": "A continuation of codetake using Nextjs",
-                "Categories": [
-                  "react",
-                  "Nextjs",
-                  "localStorage",
-                  "responsive",
-                  "SPA",
-                  "PWA",
-                  "hooks"
-                ],
-                "Changes": "Made the components into pages.",
-                "Roadmap": "to be hosted",
-                "Creator": ""
-              }))
-            console.log(results)
-            console.log(usedArray)
-            console.log(searchTagsList.map(one => finalSet.forEach(function(each){return each})))
-            console.log(results[0])
-            if(results){
-                alert("yes it does contain that tag")
-                setqueriedList(results[0])
+            const searchResults = searchTagsList.map(one => projectArray.filter(each => each.Categories.includes(one)))
+            const finalResults = []
+            const enhancedResults = searchResults.map(queriedProjectLists => queriedProjectLists.filter(project => finalResults.push(project)))
+            if(finalResults.length > 0){
+                setqueriedList(finalResults)
             } else {
-                alert("no it does not contain " + searchValue)
+                alert("none of the projects contain any of these tags" )
             }
         }
-        /*if(selection.value === "description"){
-            const results = newTestArray.filter(one => {return one.Description.includes(searchDescriptionList)})
-            console.log(results)
-            if(results.length !== 0){
-                alert("yes it does contain that tag")
+        if(selection.value === "description"){
+            const results = projectArray.filter(project => {return project.Description.includes(searchValue)})
+            if(results.length > 0){
+                setqueriedList(results)
             } else {
-                alert("no it does not contain " + searchValue)
+                alert("none of the projects contain: " + searchValue)
             }
-        }*/
+        }
     }
 
     function Displayprop() {
@@ -176,13 +127,11 @@ function Display(){
             </div>)})
     )}
 
-    const [refid, setrefid] = useState("")
-
     function setRef(event){
         serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
-        )).then((ret, index) => {setrefid(ret.ref.id); sessionStorage.setItem("ref", ret.ref.id); console.log("refid: " + refid)})
+        )).then((ret, index) => {sessionStorage.setItem("ref", ret.ref.id); console.log("refid: " + ret.ref.id)})
     }
 
     const [username, setusername] = useState("")
@@ -226,7 +175,6 @@ function Display(){
 
 
 
-    console.log(queriedList)
 
     return(
         <div><Navbar />
@@ -243,7 +191,7 @@ function Display(){
             <img src="/search.png" style={{
                     width: '24px', 
                     height: '24px',
-                    marginRight: '5x',
+                    marginRight: '5px',
                     cursor: "pointer"
                     }} className="searchbutton"
                 onClick={findProjects}
@@ -255,15 +203,13 @@ function Display(){
             </select>
             <br />
             <div className="searchdiv">
-                <label className="searchLabel">Title search Values</label>
-                {searchTitleList.map(each => <Tag tag={each}/>)}
-                <label className="searchLabel">Tags search Values</label>
-                {searchTagsList.map(each => <Tag tag={each}/>)}
-                <label className="searchLabel">Description search Values</label>
-                {searchDescriptionList.map(each => <Tag tag={each}/>)}
+                <div className="list">
+                    <label className="searchLabel">Tags search Values</label>
+                    {searchTagsList.map(each => <Tag tag={each}/>)}
+                </div>
             </div>    
         </div>
-        {chosenOne === "nothing" && queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 ? <Querieddisplay /> : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
+        {chosenOne === "nothing" && queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 ? <Querieddisplay /> : <Userdisplay 
         Project_Title= {chosenOne.Project_Title}
         Description= {chosenOne.Description}
         Roadmap={chosenOne.Roadmap}
@@ -271,7 +217,7 @@ function Display(){
         Creator={chosenOne.Creator}
         Categories={chosenOne.Categories}
         Id={chosenOne.Id}
-        /> : <Updateproject />}</div>
+        />}</div>
     )
 }
 

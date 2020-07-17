@@ -10,12 +10,9 @@ a {
 
 .search {
     padding: 15px;
-    position: absolute;
-    top: 0;
     margin: 0;
     border-radius: 0 12px 12px 0;
     border: none;
-    left: 0;
 }
 
 .searchfield {
@@ -47,7 +44,12 @@ a {
 }
 
 .searchdiv {
+    margin: 20px;
+}
+
+.list {
     background-color: #cad2c5;
+    margin-bottom: 20px;
 }
 
 option {

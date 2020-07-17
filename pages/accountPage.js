@@ -11,10 +11,10 @@ function Accountinfo(){
     const worksIdArray = []
     const [creatorName, setcreatorName] = useState(userName)
     const [chosenOne, setChosenOne] = useState("nothing")
-    //const [refid, setrefid] = useState("")
+    const [refid, setrefid] = useState(sessionStorage.getItem("ref"))
     const [userId, setuserId] = useState("")
 
-    serverClient.query(
+    worksIdArray.length === 0 && serverClient.query(
         q.Map(
             q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
             q.Lambda("X", q.Get(q.Var("X")))
@@ -26,7 +26,6 @@ function Accountinfo(){
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
     ).then((ret, Index) => {sessionStorage.setItem("ref", ret.ref.id)})
 
-    const refid = sessionStorage.getItem("ref")
 
 
     console.log("chosenOne: " + chosenOne)
@@ -62,30 +61,35 @@ function Accountinfo(){
     }
 
     function choseOne(event){
-        serverClient.query(
+        chosenOne === "nothing" && serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.innerText)
-        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data); serverClient.query(
+        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data)}) 
+        
+        serverClient.query(
             q.Map(
                 q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
                 q.Lambda("X", q.Get(q.Var("X")))
               )
-        ).then((ret, index) => {ret.data.map(one => {console.log(one.data); worksIdArray.push(one.ref.id); worksArray.push(one.data); localStorage.setItem('yourProjects', JSON.stringify(worksArray));})})})
+        ).then((ret, index) => {ret.data.map(one => {console.log(one.data); worksIdArray.push(one.ref.id); worksArray.push(one.data); localStorage.setItem('yourProjects', JSON.stringify(worksArray));})})
     }
 
     function setRef(event){
-        
         serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
-        )).then((ret, index) => {setrefid(ret.ref); console.log("ref: " + ret.ref.id); sessionStorage.setItem("ref", ret.ref.id)})
+        )).then((ret, index) => {sessionStorage.setItem("ref", ret.ref.id); console.log("refid: " + ret.ref.id)})
     }
+
+    useEffect(() => {
+        sessionStorage.setItem("dataCondition", false)
+    })
 
     function Userdisplay(props){
         return(
             <div className="display" style={{width: '300px',}}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
-                {props.Creator === username && <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} style={{
+                {props.Creator === userName && <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} style={{
                 width: '48px', 
                 height: '48px',
                 marginRight: '20px',
@@ -124,38 +128,37 @@ function Accountinfo(){
         )
     }
 
-    console.log("chosenOne" + chosenOne)
-
     return(
         <div>
             <Navbar />
             <div className={styles.head}>
-                <img src="/me.jpg" className={styles.creatorpic}/>
                 <input value={creatorName} onChange={editName} type="text" className={styles.creatorName}></input>
                 <Link  className={styles.save}
                  href="/"><a href="/"><img src="/save.svg" className={styles.save} onClick={updateName}/></a></Link>
             </div>
             <div>
-            {chosenOne === "nothing" ? projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className="display" style={{width: '300px'}}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
-                <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
-                <br />
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
-                <br />
-                <img className="creatorpic" src='/me.jpg' />
-                <p className="creatorname"><strong>{Current.Creator}</strong></p>
-                <br />
-                {taggies[index].map(each => <Tag tag={each}/>)}
-            </div>)}) : chosenOne !== "nothing" && refid === "" ? <Userdisplay 
-        Project_Title= {chosenOne.Project_Title}
-        Description= {chosenOne.Description}
-        Roadmap={chosenOne.Roadmap}
-        Changes={chosenOne.Changes}
-        Creator={chosenOne.Creator}
-        Categories={chosenOne.Categories}
-        Id={chosenOne.Id}
-        /> : <Updateproject />}
+                {chosenOne === "nothing" ? projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className="display" style={{width: '300px'}}>
+                    <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
+                    <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
+                    <br />
+                    <p style={{display: 'inline-block', margin: '5px'}}>1</p>
+                    <p style={{display: 'inline-block', margin: '5px'}}>1</p>
+                    <br />
+                    <img className="creatorpic" src='/me.jpg' />
+                    <p className="creatorname"><strong>{Current.Creator}</strong></p>
+                    <br />
+                    {taggies[index].map(each => <Tag tag={each}/>)
+                }
+            </div>)}) : 
+            <Userdisplay 
+                Project_Title= {chosenOne.Project_Title}
+                Description= {chosenOne.Description}
+                Roadmap={chosenOne.Roadmap}
+                Changes={chosenOne.Changes}
+                Creator={chosenOne.Creator}
+                Categories={chosenOne.Categories}
+                Id={chosenOne.Id}
+            />}
             </div>
         </div>
     )
