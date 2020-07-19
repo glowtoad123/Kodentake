@@ -6,32 +6,26 @@ import styles from './components/accountPage.module.css'
 
 function Accountinfo(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
-    const userName = sessionStorage.getItem("username")
-    const worksArray = []
-    const worksIdArray = []
-    const [creatorName, setcreatorName] = useState(userName)
+    const [projectsArray, setprojectsArray] = useState([])
+    const [worksIdArray, setworksIdArray] = useState([])
     const [chosenOne, setChosenOne] = useState("nothing")
-    const [refid, setrefid] = useState(sessionStorage.getItem("ref"))
-    const [userId, setuserId] = useState("")
+    const [refid, setrefid] = useState("")
+    const userName = sessionStorage.getItem("username");
+    const [creatorName, setcreatorName] = useState(userName)
+    
 
     worksIdArray.length === 0 && serverClient.query(
         q.Map(
             q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then((ret, index) => {ret.data.map(one => {console.log(one.data); worksIdArray.push(one.ref.id); worksArray.push(one.data); localStorage.setItem('yourProjects', JSON.stringify(worksArray));})})
+    ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
     
+    console.log("projectsArray: " + projectsArray)
 
-    serverClient.query(
+    refid.length === 0 && serverClient.query(
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
-    ).then((ret, Index) => {sessionStorage.setItem("ref", ret.ref.id)})
-
-
-
-    console.log("chosenOne: " + chosenOne)
-
-    const projectsArray = JSON.parse(localStorage.getItem("yourProjects"))
-    console.log(projectsArray)
+    ).then((ret, Index) => {setrefid(ret.ref.id)})
 
     const taggies = projectsArray.map(current => current.Categories)
     
@@ -57,28 +51,24 @@ function Accountinfo(){
           )
           .then((ret) => console.log(ret))})
 
-          sessionStorage.setItem("username", creatorName)
+          useEffect(() => {
+            sessionStorage.setItem("username", creatorName)
+          })
+
     }
 
     function choseOne(event){
         chosenOne === "nothing" && serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.innerText)
-        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data)}) 
-        
-        serverClient.query(
-            q.Map(
-                q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
-                q.Lambda("X", q.Get(q.Var("X")))
-              )
-        ).then((ret, index) => {ret.data.map(one => {console.log(one.data); worksIdArray.push(one.ref.id); worksArray.push(one.data); localStorage.setItem('yourProjects', JSON.stringify(worksArray));})})
+        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data)})
     }
 
     function setRef(event){
         serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
-        )).then((ret, index) => {sessionStorage.setItem("ref", ret.ref.id); console.log("refid: " + ret.ref.id)})
+        )).then((ret, index) => {alert("refid: " + ret.ref.id); sessionStorage.setItem("ref", ret.ref.id);})
     }
 
     useEffect(() => {
@@ -89,14 +79,14 @@ function Accountinfo(){
         return(
             <div className="display" style={{width: '300px',}}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
-                {props.Creator === userName && <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} style={{
+                <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} style={{
                 width: '48px', 
                 height: '48px',
                 marginRight: '20px',
                 position: 'relative',
                 left: "10px",
                 cursor: "pointer"
-                }} title={props.description} name={props.Project_Title} className="navpic" src='/edit.svg' /></a></Link>}
+                }} title={props.description} name={props.Project_Title} className="navpic" src='/edit.svg' /></a></Link>
                 <p style={{backgroundColor: "#ffffff"}}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className="textHead"><strong>Roadmap</strong></h1>
