@@ -100,7 +100,7 @@ function Display(){
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
-                <img className="creatorpic" src='/me.jpg' />
+                
                 <p className="creatorname"><strong>{project.Creator}</strong></p>
                 <br />
                 {taggies[index].map(each => <Tag tag={each}/>)}
@@ -120,7 +120,7 @@ function Display(){
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
-                <img className="creatorpic" src='/me.jpg' />
+                
                 <p className="creatorname"><strong>{project.Creator}</strong></p>
                 <br />
                 {tagList[index].map(each => <Tag tag={each}/>)}
@@ -166,7 +166,7 @@ function Display(){
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
-                <img className="creatorpic" src='/me.jpg' />
+                
                 <p className="creatorname"><strong>{props.Creator}</strong></p>
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}

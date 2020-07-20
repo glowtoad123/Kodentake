@@ -148,7 +148,7 @@ function Queriedresults(){
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
-                <img className="creatorpic" src='/me.jpg' />
+                
                 <p className="creatorname"><strong>{Current.Creator}</strong></p>
                 <br />
                 {taggies.map(each => each[index].map(eachone =>  <Tag tag={eachone}/>))}

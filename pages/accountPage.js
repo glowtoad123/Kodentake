@@ -9,6 +9,7 @@ function Accountinfo(){
     const [projectsArray, setprojectsArray] = useState([])
     const [worksIdArray, setworksIdArray] = useState([])
     const [chosenOne, setChosenOne] = useState("nothing")
+    const [chosenId, setchosenId] = useState("")
     const [refid, setrefid] = useState("")
     const userName = sessionStorage.getItem("username");
     const [creatorName, setcreatorName] = useState(userName)
@@ -61,7 +62,7 @@ function Accountinfo(){
         chosenOne === "nothing" && serverClient.query(
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.innerText)
-        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data)})
+        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data); setchosenId(ret.ref.id)})
     }
 
     function setRef(event){
@@ -69,6 +70,33 @@ function Accountinfo(){
             q.Get(
             q.Match(q.Index("Project_Title"), event.target.name)
         )).then((ret, index) => {alert("refid: " + ret.ref.id); sessionStorage.setItem("ref", ret.ref.id);})
+    }
+
+    function deleteProject(event){
+
+        var confirmDeletion = confirm("Press a button!");
+            if (confirmDeletion == true) {
+                chosenId.length === 0 && serverClient.query(
+                    q.Get(
+                    q.Match(q.Index("Project_Title"), event.target.name)
+                )).then((ret, index) => {console.log(ret); setchosenId(ret.ref.id)})
+
+                serverClient.query(
+                    q.Delete(
+                      q.Ref(q.Collection('Projects'), chosenId)
+                    )
+                  )
+                  .then((ret) => console.log(ret))
+                
+                  serverClient.query(
+                    q.Map(
+                        q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
+                        q.Lambda("X", q.Get(q.Var("X")))
+                      )
+                ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
+                alert("press the delete button again to delete project. (due to some unknown bug the project wont delete the first time. After that, refresh the page and the project should be gone")
+            }
+
     }
 
     useEffect(() => {
@@ -87,6 +115,7 @@ function Accountinfo(){
                 left: "10px",
                 cursor: "pointer"
                 }} title={props.description} name={props.Project_Title} className="navpic" src='/edit.svg' /></a></Link>
+                <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                 <p style={{backgroundColor: "#ffffff"}}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className="textHead"><strong>Roadmap</strong></h1>
@@ -98,7 +127,7 @@ function Accountinfo(){
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
-                <img className="creatorpic" src='/me.jpg' />
+                
                 <p className="creatorname"><strong>{props.Creator}</strong></p>
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}
@@ -125,16 +154,18 @@ function Accountinfo(){
                 <input value={creatorName} onChange={editName} type="text" className={styles.creatorName}></input>
                 <Link  className={styles.save}
                  href="/"><a href="/"><img src="/save.svg" className={styles.save} onClick={updateName}/></a></Link>
+                
             </div>
             <div>
                 {chosenOne === "nothing" ? projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className="display" style={{width: '300px'}}>
                     <h1 onClick={choseOne} className="displaytitle"><strong>{Current.Project_Title}</strong></h1>
+                    <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                     <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
                     <br />
                     <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                     <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                     <br />
-                    <img className="creatorpic" src='/me.jpg' />
+                    
                     <p className="creatorname"><strong>{Current.Creator}</strong></p>
                     <br />
                     {taggies[index].map(each => <Tag tag={each}/>)
