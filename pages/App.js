@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import logo from './logo.svg';
 import Components from './components/navbar'
 import Display from './components/projectdisplay'
-import './styles.css';
 import Enter from './components/enter'
 import Newproject from './components/newProject'
 //import Signup, {Or, Login} from './components/enter'
