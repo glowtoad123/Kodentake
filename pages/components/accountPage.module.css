@@ -22,7 +22,7 @@
     margin-right: 30px;
 }
 
-.creatorName {
+.changeName {
     width: 178px;
     height: 30px;
     background: #FFFFFF;
@@ -34,6 +34,19 @@
     font-weight: bold;
     margin: auto;
     vertical-align: middle;
+}
+
+.creatorname {
+    display: inline-block;
+    font-size: 16px;
+    position: relative;
+    bottom: 25px;
+    margin-left: 12px;
+    z-index: 0;
+    background-color: #2f3e46;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
 }
 
 .save {
@@ -52,4 +65,89 @@
     margin-left: 20px;
     vertical-align: middle;
     margin-left: 20px;
+}
+
+.edit {
+                width: 48px; 
+                height: 48px;
+                margin-right: 20px;
+                position: relative;
+                left: 10px;
+                cursor: pointer;
+}
+
+.description {
+    background-color: #ffffff;
+}
+
+.textHead {
+    background-color: #b3c1b1;
+    display: inline-block;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0 6px 6px 0;
+}
+
+.display {
+    display: inline-block;
+    background-color: #cad2c5;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);    
+    border: none;
+    border-radius: 12px;
+    margin: 20px;
+    margin-top: 80px;
+    z-index: 0;
+    width: 300px;
+}
+
+.text {
+    background-color: #ffffff;
+}
+
+.tags {
+    display: inline-block;
+    background-color: #84a98c;
+    color: black;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 12px;
+    border: none;
+    border-radius: 6px;
+}
+
+.displaytitle {
+    background-color: #2f3e46;
+    box-shadow: 0 25.6px 57.6px 0 rgba(0, 0, 0, .22), 0 4.8px 14.4px 0 rgba(0, 0, 0, .18),;
+    color: white;
+    display: inline-block;
+    z-index: 0;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.button {
+    -moz-appearance:none !important;
+    margin: auto;
+    border: none;
+    display: inline;
+    vertical-align: center;
+    width: 24px; 
+    height: 24px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#searchtype {
+    -moz-appearance:none !important;
+    padding: 15px;
+    background-color: #cad2c5;
+    color: #2f3e46;
+    border: none;
+    font-weight: bold;
+    border-radius: 12px;
+    margin: 0;
+}
+
+.list {
+    background-color: #cad2c5;
+    margin-bottom: 20px;
 }

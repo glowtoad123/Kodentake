@@ -88,13 +88,7 @@ function Updateproject(){
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
             <input type="text" className={styles.newProjectItem} onChange={settingtagName} name="Categories"        value={tagName}      placeholder=" Categories"      id={styles.Categories}       ></input>
                 <button onClick={settingtagList} id={styles.addCategory} type="submit">Add Category</button>
-                <div>{tagList.map((current, index) => <p id={index} onClick={() => removeTag(index)} className="tags" style={{
-                display: 'inline-block',
-                backgroundColor: '#84a98c',
-                color: "black",
-                margin: '12px',
-                border: 'none',
-                borderRadius: '6px'}}><strong>{current}</strong></p> )}</div>
+                <div>{tagList.map((current, index) => <p id={index} onClick={() => removeTag(index)} className={styles.tags} ><strong>{current}</strong></p> )}</div>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Roadmap"           value={Roadmap}         placeholder=" Roadmap"         id={styles.Roadmap}          ></textarea>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>

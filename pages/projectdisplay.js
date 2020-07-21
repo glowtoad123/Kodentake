@@ -4,6 +4,7 @@ import faunadb, { query as q } from "faunadb"
 //import edit from '/edit.svg'
 import Navbar from './navbar'
 import Link from 'next/link'
+import styles from './components/accountPage.module.css'
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
@@ -21,14 +22,7 @@ function Display(){
 
     function Tag(props){
         return(
-            <p style={{
-                display: 'inline-block',
-                backgroundColor: '#84a98c',
-                color: "black",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                margin: '12px',
-                border: 'none',
-                borderRadius: '6px'}}><strong>{props.tag}</strong></p>
+            <p className={styles.tags}><strong>{props.tag}</strong></p>
         )
     }
 
@@ -93,15 +87,13 @@ function Display(){
     function Displayprop() {
         return(
 
-            projectArray.map((project, index) => {return (<div className="display" style={{width: '300px'}}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{project.Project_Title}</strong></h1>
+            projectArray.map((project, index) => {return (<div className={styles.display}>
+                <h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1>
                 <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
                 <br />
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
                 
-                <p className="creatorname"><strong>{project.Creator}</strong></p>
+                <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
                 <br />
                 {taggies[index].map(each => <Tag tag={each}/>)}
             </div>)})
@@ -113,15 +105,13 @@ function Display(){
         const tagList = queriedList.map(one => one.Categories)
 
         return(
-        queriedList.map((project, index) => {return (<div className="display" style={{width: '300px'}}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{project.Project_Title}</strong></h1>
+        queriedList.map((project, index) => {return (<div className={styles.display}>
+                <h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1>
                 <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
                 <br />
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
                 
-                <p className="creatorname"><strong>{project.Creator}</strong></p>
+                <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
                 <br />
                 {tagList[index].map(each => <Tag tag={each}/>)}
             </div>)})
@@ -141,33 +131,50 @@ function Display(){
         sessionStorage.setItem("dataCondition", false)
     })
 
+    function deleteProject(event){
+        var confirmDeletion = confirm("Are you sure you want to delete that project?");
+            if (confirmDeletion == true) {
 
+                chosenId.length === 0 && serverClient.query(
+                    q.Get(
+                    q.Match(q.Index("Project_Title"), event.target.name)
+                )).then((ret, index) => {console.log(ret); setchosenId(ret.ref.id); serverClient.query(
+                    q.Delete(
+                      q.Ref(q.Collection('Projects'), ret.ref.id)
+                    )
+                  )
+                  .then((ret) => console.log(ret))
+                })
+
+                
+                  serverClient.query(
+                    q.Map(
+                        q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
+                        q.Lambda("X", q.Get(q.Var("X")))
+                      )
+                ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
+                alert("item has been deleted")
+            }
+
+    }
 
     function Userdisplay(props){
         return(
-            <div className="display" style={{width: '300px',}}>
+            <div className={styles.display}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
-                {props.Creator === username && <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} style={{
-                width: '48px', 
-                height: '48px',
-                marginRight: '20px',
-                position: 'relative',
-                left: "10px",
-                cursor: "pointer"
-                }} title={props.description} name={props.Project_Title} className="navpic" src='/edit.svg' /></a></Link>}
-                <p style={{backgroundColor: "#ffffff"}}><strong>{props.Description}</strong></p>
+                {username === props.Creator && (<div><Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>)}
+                <p className={styles.description}><strong>{props.Description}</strong></p>
                 <br />
-                <h1 className="textHead"><strong>Roadmap</strong></h1>
-                <p style={{backgroundColor: "#ffffff"}}><strong>{props.Roadmap}</strong></p>
+                <h1 className={styles.textHead}><strong>Roadmap</strong></h1>
+                <p className={styles.text}><strong>{props.Roadmap}</strong></p>
                 <br />
-                <h1 className="textHead"><strong>Changes</strong></h1>
-                <p style={{backgroundColor: "#ffffff"}}><strong>{props.Changes}</strong></p>
+                <h1 className={styles.textHead}><strong>Changes</strong></h1>
+                <p className={styles.text}><strong>{props.Changes}</strong></p>
                 <br />
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
-                <p style={{display: 'inline-block', margin: '5px'}}>1</p>
                 <br />
                 
-                <p className="creatorname"><strong>{props.Creator}</strong></p>
+                <p className={styles.creatorName}><strong>{props.Creator}</strong></p>
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}
             </div>)
@@ -180,30 +187,16 @@ function Display(){
         <div><Navbar />
         <div className="search">
             <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
-            <img src="/plus.svg" style={{
-                    width: '24px', 
-                    height: '24px',
-                    marginRight: '5px',
-                    cursor: "pointer"
-                    }} className="searchbutton"
-                onClick={settingsearchList}
-            />
-            <img src="/search.png" style={{
-                    width: '24px', 
-                    height: '24px',
-                    marginRight: '5px',
-                    cursor: "pointer"
-                    }} className="searchbutton"
-                onClick={findProjects}
-            />
-            <select id="searchtype">
+            <img src="/plus.svg" className={styles.button} onClick={settingsearchList}/>
+            <img src="/search.png" className={styles.button} onClick={findProjects}/>
+            <select id={styles.searchtype}>
                 <option id="1" value="tags">tags</option>
                 <option id="2" value="title">title</option>
                 <option id="3" value="description">description</option>
             </select>
             <br />
             <div className="searchdiv">
-                <div className="list">
+                <div className={styles.list}>
                     <label className="searchLabel">Tags search Values</label>
                     {searchTagsList.map(each => <Tag tag={each}/>)}
                 </div>

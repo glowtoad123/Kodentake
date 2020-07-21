@@ -123,12 +123,12 @@ function Enter(props){
     console.log(hasLoggedIn)
 
     return(
-      <div name={hasLoggedIn} style={signboxStyle} className="styles.signbox">
+      <div name={hasLoggedIn} style={signboxStyle} className={styles.signbox}>
         <center>
             <div>
-              <input onChange={readingProgress} style={signfieldStyle} className="styles.signfield" value={username} type="text"    name="username" id="styles.username"  placeholder="username" />
-              <input onChange={readingProgress} style={signfieldStyle} className="styles.signfield" value={password}    type="password" name="password"    id="styles.password" placeholder="password" />
-              <Link href="/projectdisplay"><a><button style={submitStyle} className="styles.submit" onClick={readAccount}>Login</button></a></Link>
+              <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={username} type="text"    name="username" id={styles.username}  placeholder="username" />
+              <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={password}    type="password" name="password"    id={styles.password} placeholder="password" />
+              <Link href="/projectdisplay"><a><button style={submitStyle} className={styles.submit} onClick={readAccount}>Login</button></a></Link>
             </div>
         </center>
       </div>
@@ -140,7 +140,7 @@ function Enter(props){
 
   function Or(){
     return(
-      <div style={orstyle} className="styles.or"><center>OR</center></div>
+      <div style={orstyle} className={styles.or}><center>OR</center></div>
     )
   }
 
@@ -249,13 +249,13 @@ function Enter(props){
 
       return (
           <div>
-              <center style={signboxStyle} className="styles.signbox">
+              <center style={signboxStyle} className={styles.signbox}>
                 
                 <div>
-                    <input onChange={readingProgress} style={signfieldStyle} className="styles.signfield" value={email} type="email"   name="email" id="styles.email"   placeholder="email" />
-                    <input onChange={readingProgress} style={signfieldStyle} className="styles.signfield" value={password}    type="password" name="password"    id="styles.password" placeholder="password" />
-                    <input onChange={readingProgress} style={signfieldStyle} className="styles.signfield" value={username} type="text"    name="username" id="styles.username"  placeholder="username" />
-                    <Link href="/projectdisplay"><a><button style={submitStyle} className="styles.submit" onClick={addAccount}>Register</button></a></Link>
+                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={email} type="email"   name="email" id={styles.email}   placeholder="email" />
+                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={password}    type="password" name="password"    id={styles.password} placeholder="password" />
+                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={username} type="text"    name="username" id={styles.username}  placeholder="username" />
+                    <Link href="/projectdisplay"><a><button style={submitStyle} className={styles.submit} onClick={addAccount}>Register</button></a></Link>
                 </div>
 
               </center>
