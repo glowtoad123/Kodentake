@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import faunadb, { query as q } from "faunadb"
 import styles from "./components/NewProject.module.css"
 import Navbar from "./navbar"
+import Link from 'next/link'
 
 function Newproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
@@ -51,7 +52,6 @@ function Newproject(){
               { data: projectData },
             )
           ).then(ret => console.log(ret.data))
-        event.preventDefault()
     }
 
 
@@ -64,7 +64,7 @@ function Newproject(){
     }
 
     return(
-        <div><Navbar /><form id={styles.npform} onSubmit={saveData}>
+        <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
             <input className={styles.newProjectItem} onChange={settingData} name="Version_num"       value={Version_num}     placeholder=" Version_num"     id={styles.Version_num}      ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
@@ -73,7 +73,7 @@ function Newproject(){
                 <div>{tagList.map((current, index) => <p onClick={() => removeTag(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Roadmap"           value={Roadmap}         placeholder=" Roadmap"         id={styles.Roadmap}          ></textarea>
-            <button id={styles.submit} type="submit">Save</button>
+            <Link href="/projectdisplay"><a href="/projectdisplay"><button onClick={saveData} id={styles.submit} type="submit">Save</button></a></Link>
         </form></div>
     )
 }
