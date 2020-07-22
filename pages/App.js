@@ -7,15 +7,15 @@ import Newproject from './newProject'
 //import Signup, {Or, Login} from './components/enter'
 
 function App() {
+  const [username, setusername] = useState("")
   useEffect(() => {
-    const username = sessionStorage.getItem("username")
+    setusername(sessionStorage.getItem("username"))
   })
 
   return (
     <div className="App container">
       <header className="App-header">
         {!username && <Enter />}
-        <Components onClick={alterPage} />
         {/*{page === "takes" && <Display />}
         <button onClick={toNewProjectPage} className="newProject" name="newProject">Create New Project</button>*/}
         {/*<Display />*/}
