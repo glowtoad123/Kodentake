@@ -11,8 +11,13 @@ function Accountinfo(){
     const [chosenOne, setChosenOne] = useState("nothing")
     const [chosenId, setchosenId] = useState("")
     const [refid, setrefid] = useState("")
-    const userName = sessionStorage.getItem("username");
-    const [creatorName, setcreatorName] = useState(userName)
+    const [userName, setuserName] = useState("")
+    const [creatorName, setcreatorName] = useState("")
+
+    useEffect(() => {
+        setuserName(sessionStorage.getItem("username"));
+        setcreatorName(sessionStorage.getItem("username"))
+    })
     
 
     worksIdArray.length === 0 && serverClient.query(

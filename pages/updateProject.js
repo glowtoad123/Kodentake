@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 //import me from '/me.jpg'
 import faunadb, { query as q } from "faunadb"
 import styles from "./components/NewProject.module.css"
@@ -7,10 +7,15 @@ import Navbar from './navbar'
 
 function Updateproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
-    
-    const refid = sessionStorage.getItem("ref")
+    const [refid, setrefid] = useState("")
+    const [username, setusername] = useState("")
+    const [dataCondition, setdataCondition] = useState("")
+    useEffect(() => {
+        setrefid(sessionStorage.getItem("ref"));
+        setusername(sessionStorage.getItem("username"));
+        setdataCondition(sessionStorage.getItem("dataCondition"))
+    })
     console.log("refid: " + refid)
-    const username = sessionStorage.getItem("username")
     console.log(username)
     const [projectData, setProjectData] = useState({
         Project_Title: "",
@@ -23,7 +28,6 @@ function Updateproject(){
     })
     const [tagList, settagList] = useState([])
     console.log(projectData)
-    const [dataCondition, setdataCondition] = useState(sessionStorage.getItem("dataCondition"))
     dataCondition !== "true" && serverClient.query(
             q.Get(q.Ref(q.Collection('Projects'), refid))
         )

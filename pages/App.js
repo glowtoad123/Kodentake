@@ -1,27 +1,15 @@
-import React, {useState} from 'react';
-import logo from './logo.svg';
-import Components from './components/navbar'
-import Display from './components/projectdisplay'
-import Enter from './components/enter'
-import Newproject from './components/newProject'
+import React, {useState, useEffect} from 'react'
+import Components from './navbar'
+import Display from './projectdisplay'
+import Enter from './enter'
+import Newproject from './newProject'
+
 //import Signup, {Or, Login} from './components/enter'
 
 function App() {
-
-  const [page, setPage] = useState("")
-  const [cp, setCp] = useState(true)
-
-  function alterPage(){
-    setPage(sessionStorage.getItem("page"))
-  }
-
-  function toNewProjectPage(){
-    setCp((current) => {return !current})
-  }
-  console.log(cp)
-  console.log(page)
-
-  const username = sessionStorage.getItem("username")
+  useEffect(() => {
+    const username = sessionStorage.getItem("username")
+  })
 
   return (
     <div className="App container">

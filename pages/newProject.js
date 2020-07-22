@@ -8,7 +8,10 @@ function Newproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     //const [username, setusername] = useState("")
     //setusername(sessionStorage.getItem("username"))
-    const username = sessionStorage.getItem("username")
+    const [username, setusername] = useState("")
+    useEffect(() => {
+        setusername(sessionStorage.getItem("username"))
+    })
     console.log(username)
     
     const [projectData, setProjectData] = useState({
