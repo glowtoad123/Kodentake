@@ -3,7 +3,6 @@ import faunadb, { query as q } from "faunadb"
 import Navbar from './navbar'
 import Link from 'next/link'
 import styles from './components/accountPage.module.css'
-import { getURL } from 'next/dist/next-server/lib/utils'
 
 function Accountinfo(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
@@ -18,8 +17,6 @@ function Accountinfo(){
     useEffect(() => {
         setuserName(sessionStorage.getItem("username"));
         setcreatorName(sessionStorage.getItem("username"))
-        var myUrl = getURL()
-        console.log(myUrl)
     })
     
 
