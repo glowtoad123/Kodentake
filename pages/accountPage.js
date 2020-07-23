@@ -148,15 +148,17 @@ function Accountinfo(){
             <div>
                 {chosenOne === "nothing" ? projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
                     <h1 onClick={choseOne} className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1>
-                    <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
-                    <p><strong>{Current.Description.slice(0, 99) + "..."}</strong></p>
+                    <div className={styles.descriptionDiv}><strong >{Current.Description}</strong></div>
                     <br />
                     <br />
                     
                     <p className={styles.creatorname}><strong>{Current.Creator}</strong></p>
                     <br />
-                    {taggies[index].map(each => <Tag tag={each}/>)
-                }
+                    <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
+                    <div className={styles.projectFooter}>
+                        <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
+                        <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                    </div>
             </div>)}) : 
             <Userdisplay 
                 Project_Title= {chosenOne.Project_Title}

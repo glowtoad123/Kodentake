@@ -89,13 +89,13 @@ function Display(){
 
             projectArray.map((project, index) => {return (<div className={styles.display}>
                 <h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1>
-                <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
+                <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
                 <br />
                 
                 <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
                 <br />
-                {taggies[index].map(each => <Tag tag={each}/>)}
+                <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
             </div>)})
         )
     }
@@ -107,13 +107,13 @@ function Display(){
         return(
         queriedList.map((project, index) => {return (<div className={styles.display}>
                 <h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1>
-                <p><strong>{project.Description.slice(0, 99) + "..."}</strong></p>
+                <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
                 <br />
                 
                 <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
                 <br />
-                {tagList[index].map(each => <Tag tag={each}/>)}
+                <div className={styles.tagDiv}>{tagList[index].map(each => <Tag tag={each}/>)}</div>
             </div>)})
     )}
 
@@ -176,7 +176,7 @@ function Display(){
                 
                 <p className={styles.creatorName}><strong>{props.Creator}</strong></p>
                 <br />
-                {props.Categories.map(each => <Tag tag={each}/>)}
+                <div className={styles.userDisplayTags}>{props.Categories.map(each => <Tag tag={each}/>)}</div>
             </div>)
     }
 

@@ -22,6 +22,18 @@
     margin-right: 30px;
 }
 
+.descriptionDiv {
+    background-color: #CAD2C5;
+    height: 200px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+/*.descriptionText {
+    background-color: #CAD2C5;
+}*/
+
 .changeName {
     width: 178px;
     height: 30px;
@@ -58,22 +70,23 @@
     margin-left: 20px;
 }
 
+.projectFooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .delete {
     width: 36px;
     height: 36px;
-    margin-right: 20px;
-    margin-left: 20px;
     vertical-align: middle;
-    margin-left: 20px;
 }
 
 .edit {
-                width: 48px; 
-                height: 48px;
-                margin-right: 20px;
-                position: relative;
-                left: 10px;
+                width: 36px; 
+                height: 36px;
                 cursor: pointer;
+                vertical-align: middle;
 }
 
 .description {
@@ -104,13 +117,26 @@
 }
 
 .tags {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
     background-color: #84a98c;
     color: black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin: 12px;
     border: none;
     border-radius: 6px;
+}
+
+.userDisplayTags {
+    display: inline;
+    background-color: #84a98c;
+    color: black;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 12px;
+    border: none;
+    border-radius: 6px;
+    overflow-x: scroll;
+    flex-direction: row;
 }
 
 .displaytitle {
@@ -150,4 +176,10 @@
 .list {
     background-color: #cad2c5;
     margin-bottom: 20px;
+}
+
+.tagDiv {
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
 }
