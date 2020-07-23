@@ -18,6 +18,8 @@ function Accountinfo(){
         setuserName(sessionStorage.getItem("username"));
         setcreatorName(sessionStorage.getItem("username"))
     })
+
+    console.log("userName: " + userName)
     
 
     worksIdArray.length === 0 && serverClient.query(
@@ -59,6 +61,7 @@ function Accountinfo(){
 
           useEffect(() => {
             sessionStorage.setItem("username", creatorName)
+            sessionStorage.setItem("dataCondition", false)
           })
 
     }
@@ -104,9 +107,7 @@ function Accountinfo(){
 
     }
 
-    useEffect(() => {
-        sessionStorage.setItem("dataCondition", false)
-    })
+
 
     function Userdisplay(props){
         return(

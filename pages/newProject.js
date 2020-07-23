@@ -21,10 +21,10 @@ function Newproject(){
         Categories: [],
         Changes: "",
         Roadmap: "",
-        Creator: username,
+        Creator: "",
     })
 
-    const {Project_Title, Version_num, Description, Categories, Changes, Roadmap} = projectData
+    const {Project_Title, Version_num, Description, Categories, Creator, Changes, Roadmap} = projectData
     const [tagName, settagName] = useState("")
     const [tagList, settagList] = useState([])
 
@@ -48,6 +48,7 @@ function Newproject(){
 
     function saveData(event){
         projectData.Categories = tagList
+        projectData.Creator = username
         console.log(Categories)
         serverClient.query(
             q.Create(
@@ -77,6 +78,7 @@ function Newproject(){
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Roadmap"           value={Roadmap}         placeholder=" Roadmap"         id={styles.Roadmap}          ></textarea>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button onClick={saveData} id={styles.submit} type="submit">Save</button></a></Link>
+            <p styles={{display: "none"}} name="Creator" value={username}></p>
         </form></div>
     )
 }

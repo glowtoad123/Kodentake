@@ -9,11 +9,11 @@ function Updateproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     const [refid, setrefid] = useState("")
     const [username, setusername] = useState("")
-    const [dataCondition, setdataCondition] = useState("")
+    const [dataCondition, setdataCondition] = useState("false")
     useEffect(() => {
         setrefid(sessionStorage.getItem("ref"));
         setusername(sessionStorage.getItem("username"));
-        setdataCondition(sessionStorage.getItem("dataCondition"))
+        //setdataCondition(sessionStorage.getItem("dataCondition"))
     })
     console.log("refid: " + refid)
     console.log(username)
