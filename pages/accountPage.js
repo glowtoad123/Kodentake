@@ -18,10 +18,10 @@ function Accountinfo(){
     useEffect(() => {
         setuserName(sessionStorage.getItem("username"));
         setcreatorName(sessionStorage.getItem("username"))
+        var myUrl = getURL()
+        console.log(myUrl)
     })
     
-    var myUrl = getURL()
-    console.log(myUrl)
 
     worksIdArray.length === 0 && serverClient.query(
         q.Map(
