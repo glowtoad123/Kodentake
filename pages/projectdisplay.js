@@ -126,8 +126,8 @@ function Display(){
 
     const [username, setusername] = useState("")
      useEffect(() => {
-        username.length == 0 && (setusername(sessionStorage.getItem("username")),
-            console.log(username));
+        setusername(sessionStorage.getItem("username")),
+        console.log(username),
         sessionStorage.setItem("dataCondition", false)
     })
 
