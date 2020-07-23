@@ -162,7 +162,7 @@
     cursor: pointer;
 }
 
-#searchtype {
+.searchtype {
     -moz-appearance:none !important;
     padding: 15px;
     background-color: #cad2c5;

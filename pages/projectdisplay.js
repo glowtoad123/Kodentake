@@ -189,7 +189,7 @@ function Display(){
             <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
             <img src="/plus.svg" className={styles.button} onClick={settingsearchList}/>
             <img src="/search.png" className={styles.button} onClick={findProjects}/>
-            <select id={styles.searchtype}>
+            <select id="searchtype" class={styles.searchtype}>
                 <option id="1" value="tags">tags</option>
                 <option id="2" value="title">title</option>
                 <option id="3" value="description">description</option>
