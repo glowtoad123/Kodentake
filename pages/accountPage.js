@@ -19,7 +19,6 @@ function Accountinfo(){
         setcreatorName(sessionStorage.getItem("username"))
     })
 
-    console.log("userName: " + userName)
     
 
     worksIdArray.length === 0 && serverClient.query(
@@ -29,7 +28,6 @@ function Accountinfo(){
           )
     ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
     
-    console.log("projectsArray: " + projectsArray)
 
     refid.length === 0 && serverClient.query(
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
