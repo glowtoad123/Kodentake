@@ -131,7 +131,7 @@
 }
 
 .tags {
-    display: flex;
+    display: inline-block;
     flex-direction: row;
     background-color: #84a98c;
     color: black;
@@ -139,6 +139,7 @@
     margin: 12px;
     border: none;
     border-radius: 6px;
+    width: max-content;
 }
 
 .userDisplayTags {
@@ -190,6 +191,7 @@
 .list {
     background-color: #cad2c5;
     margin-bottom: 20px;
+    border-radius: 6px;
 }
 
 .tagDiv {
