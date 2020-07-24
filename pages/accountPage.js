@@ -3,6 +3,8 @@ import faunadb, { query as q } from "faunadb"
 import Navbar from './navbar'
 import Link from 'next/link'
 import styles from './components/accountPage.module.css'
+import crypto from 'crypto'
+
 
 function Accountinfo(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
@@ -12,11 +14,10 @@ function Accountinfo(){
     const [chosenId, setchosenId] = useState("")
     const [refid, setrefid] = useState("")
     const [userName, setuserName] = useState("")
-    const [creatorName, setcreatorName] = useState("")
 
     useEffect(() => {
         setuserName(sessionStorage.getItem("username"));
-        setcreatorName(sessionStorage.getItem("username"))
+        sessionStorage.setItem("dataCondition", false)
     })
 
     
@@ -34,33 +35,61 @@ function Accountinfo(){
     ).then((ret, Index) => {setrefid(ret.ref.id)})
 
     const taggies = projectsArray.map(current => current.Categories)
-    
-    function editName(event){
-        setcreatorName(event.target.value)
-    }
+
 
     function updateName(event){
 
-        serverClient.query(
-            q.Update(
-              q.Ref(q.Collection("Accounts"), refid),
-              { data: {username: creatorName}},
-            )
-          )
-          .then((ret) => console.log(ret))
+        var changeuserName = prompt("please update your username")
 
-          worksIdArray.map(id => {serverClient.query(
-            q.Update(
-              q.Ref(q.Collection('Projects'), id),
-              { data: {Creator: creatorName}},
-            )
-          )
-          .then((ret) => console.log(ret))})
+        if (changeuserName !== "" || changeuserName !== null) {
+            var updatePassword = prompt("please enter your old password or change your password to continue")
+            if(updatePassword !== "" || updatePassword !== null) {
+                const hashedPassword = updatePassword + changeuserName
+                const hash = crypto.createHash('sha256')
+                hash.update(hashedPassword)
+                const alphaPassword = hash.digest("hex")
+                console.log("alphaPassword: " + alphaPassword)
+                crypto.pbkdf2(alphaPassword, 'salt', 10, 64, 'sha512', (err, derivedKey) => {
+                    if (err) throw err;
+                    serverClient.query(
+                        q.Get(
+                          q.Match(q.Index('dublicateUsername'), changeuserName)
+                        )
+                      )
+                      .then((ret) => {console.log(ret.data.username); alert("Sorry, but this username has alread been taken")}, (err) => {
+                        serverClient.query(
+                            q.Update(
+                              q.Ref(q.Collection("Accounts"), refid),
+                              { data: {
+                                  username: changeuserName,
+                                  password: derivedKey.toString('hex')
+                                }},
+                            )
+                          )
+                          .then((ret) => {console.log(ret); sessionStorage.setItem("username", changeuserName)});
+                    
+                        worksIdArray.map(id => {serverClient.query(
+                          q.Update(
+                            q.Ref(q.Collection('Projects'), id),
+                            { data: {Creator: changeuserName}},
+                          )
+                        )
+                        .then((ret) => console.log(ret))})
+                      })
 
-          useEffect(() => {
-            sessionStorage.setItem("username", creatorName)
-            sessionStorage.setItem("dataCondition", false)
-          })
+                })
+            } else {
+                alert("username not changed")
+            }
+        } else {
+            alert("username not changed")
+        }
+             
+
+
+
+
+
 
     }
 
@@ -139,9 +168,9 @@ function Accountinfo(){
         <div>
             <Navbar />
             <div className={styles.head}>
-                <input value={creatorName} onChange={editName} type="text" className={styles.changeName}></input>
+            <h1 className={styles.displaytitle}><strong>{userName}</strong></h1>
                 <Link  className={styles.save}
-                 href="/"><a href="/"><img src="/save.svg" className={styles.save} onClick={updateName}/></a></Link>
+                 href="/accountPage"><a href="/accountPage"><img src="/edit.svg" className={styles.save} onClick={updateName}/></a></Link>
                 
             </div>
             <div>

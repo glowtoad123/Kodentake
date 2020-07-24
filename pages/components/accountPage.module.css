@@ -1,14 +1,18 @@
 .head {
     background: #CAD2C5;
     border-radius: 12px;
-    width: 350px;
+    width: max-content;
     margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .head>img {
     vertical-align: middle;
     margin: auto;
-
+    display: flex;
+    flex-direction: row;
 }
 
 .creatorpic {
@@ -28,11 +32,21 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+    vertical-align: middle;
 }
 
 /*.descriptionText {
     background-color: #CAD2C5;
 }*/
+
+.usernameLabel {
+    border: none;
+    border-radius: 0 6px 6px 0;
+    vertical-align: middle;
+    background-color: #2f3e46;
+    box-shadow: 0 25.6px 57.6px 0 rgba(0, 0, 0, .22), 0 4.8px 14.4px 0 rgba(0, 0, 0, .18),;
+    color: white;
+}
 
 .changeName {
     width: 178px;
