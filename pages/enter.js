@@ -113,7 +113,11 @@ function Enter(props){
           q.Match(q.Index('account'), derivedKey.toString('hex'), username)
         )
       )
-      .then((ret) => (console.log(ret.data.username), setInfo(ret.data.username), sessionStorage.setItem("yourWorks", ret.data.password), sessionStorage.setItem("username", ret.data.username), setHasLoggedIn((current) => {return !current})))
+      .then((ret) => (console.log(ret.data.username), setInfo(ret.data.username), sessionStorage.setItem("yourWorks", ret.data.password), sessionStorage.setItem("username", ret.data.username), setHasLoggedIn((current) => {return !current})), (err) => {
+        alert("sorry, but you've either entered the wrong password or the wrong username");
+        sessionStorage.removeItem("username")
+        
+      })
     
     })
     }

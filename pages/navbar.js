@@ -60,6 +60,7 @@ function Navbar(){
             <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="takes" /></a></Link>
             <Link href="/newProject"><a href="/newProject"><Navprop pic='/plus.svg' description="add" /></a></Link>
             <Link href="/accountPage"><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>
+            <Link href="/enter"><a href="/enter"><Navprop pic='/login.svg' description="login/switch account" /></a></Link>
             {/*<Navprop pic='/favorite.svg' description="favorites" />
             <Navprop pic='/notification.svg' description="updates" />
             <Navprop pic='/settings.svg' description="settings" />*/}
