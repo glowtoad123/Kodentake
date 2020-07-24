@@ -41,9 +41,9 @@ function Accountinfo(){
 
         var changeuserName = prompt("please update your username")
 
-        if (changeuserName !== "" || changeuserName !== null) {
+        if (changeuserName !== "" && changeuserName !== null) {
             var updatePassword = prompt("please enter your old password or change your password to continue")
-            if(updatePassword !== "" || updatePassword !== null) {
+            if(updatePassword !== "" && updatePassword !== null) {
                 const hashedPassword = updatePassword + changeuserName
                 const hash = crypto.createHash('sha256')
                 hash.update(hashedPassword)
