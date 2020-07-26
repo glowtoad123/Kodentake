@@ -11,54 +11,6 @@ function Enter(props){
   const [hasLoggedIn, setHasLoggedIn] = useState(true)
   const [dataCondition, setdataCondition] = useState(false)
 
-  const signfieldStyle = {
-    border: 'none',
-    borderRadius: "12px",
-    boxShadow: "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-    padding: "15px",
-    display: "inline-block",
-    margin: "40px",
-    fontSize: "24px",
-    color: "#2f3e46"
-}
-
-  const submitStyle = {
-    boxShadow: "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
-    border: "none",
-    display: "block",
-    borderRadius: "12px",
-    padding: "20px",
-    backgroundColor: "#2f3e46",
-    color: "white",
-    fontWeight: "bold",
-    marginBottom: "20px",
-  }
-
-  const signboxStyle = {
-    backgroundColor: "#cad2c5",
-    border: "none",
-    borderRadius: "12px",
-    display: "block",
-    width: "500px",
-    position: "relative",
-    left: "30%",
-    margin: "10px",
-    boxShadow: "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
-    marginBottom: "50px",
-  }
-
-  const orstyle = {
-    backgroundColor: "#354f52",
-    border: "none",
-    display: "block",
-    width: "32px",
-    position: "relative",
-    left: "47.5%",
-    margin: "10px",
-    boxShadow: "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
-  }
-
   
 
   function Login(){
@@ -142,15 +94,11 @@ function Enter(props){
     console.log(hasLoggedIn)
 
     return(
-      <div name={hasLoggedIn} style={signboxStyle} className={styles.signbox}>
-        <center>
-            <div>
-              <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={username} type="text"    name="username" id={styles.username}  placeholder="username" />
-              <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={password}    type="password" name="password"    id={styles.password} placeholder="password" />
-              <Link href="/projectdisplay"><a><button style={submitStyle} className={styles.submit} onClick={readAccount}>Login</button></a></Link>
+            <div name={hasLoggedIn} className={styles.signbox}>
+              <input onChange={readingProgress} className={styles.signfield} value={username} type="text"    name="username" id={username}  placeholder="username" />
+              <input onChange={readingProgress} className={styles.signfield} value={password}    type="password" name="password"    id={password} placeholder="password" />
+              <Link href="/projectdisplay"><a><button className={styles.submit} onClick={readAccount}>Login</button></a></Link>
             </div>
-        </center>
-      </div>
     )
   }
 
@@ -159,7 +107,7 @@ function Enter(props){
 
   function Or(){
     return(
-      <div style={orstyle} className={styles.or}><center>OR</center></div>
+      <div className={styles.or}>OR</div>
     )
   }
 
@@ -269,19 +217,12 @@ function Enter(props){
       console.log(info)
 
       return (
-          <div>
-              <center style={signboxStyle} className={styles.signbox}>
-                
-                <div>
-                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={email} type="email"   name="email" id={styles.email}   placeholder="email" />
-                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={password}    type="password" name="password"    id={styles.password} placeholder="password" />
-                    <input onChange={readingProgress} style={signfieldStyle} className={styles.signfield} value={username} type="text"    name="username" id={styles.username}  placeholder="username" />
-                    <Link href="/projectdisplay"><a><button style={submitStyle} className={styles.submit} onClick={addAccount}>Register</button></a></Link>
-                </div>
-
-              </center>
-
-          </div>
+              <div className={styles.signbox}>
+                  <input onChange={readingProgress} className={styles.signfield} value={email} type="email"   name="email" id={styles.email}   placeholder="email" />
+                  <input onChange={readingProgress} className={styles.signfield} value={password}    type="password" name="password"    id={styles.password} placeholder="password" />
+                  <input onChange={readingProgress} className={styles.signfield} value={username} type="text"    name="username" id={styles.username}  placeholder="username" />
+                  <Link href="/projectdisplay"><a><button className={styles.submit} onClick={addAccount}>Register</button></a></Link>
+              </div>
       )
   }
 
