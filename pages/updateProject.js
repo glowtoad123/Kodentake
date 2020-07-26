@@ -38,6 +38,8 @@ function Updateproject(){
 
     const {Project_Title, Version_num, Description, Categories, Changes, Roadmap} = projectData
     const [tagName, settagName] = useState("")
+    const [goal, setgoal] = useState("")
+    const [roadmap, setroadmap] = useState([])
     //const [tagList, settagList] = useState(projectData.Categories)
     //const tagList = projectData.Categories
         console.log(tagList)
@@ -61,8 +63,19 @@ function Updateproject(){
         event.preventDefault()
     }
 
+    function settingGoal(event){
+        setgoal(event.target.value)
+    }
+
+    function settingroadmap(event){
+        setroadmap(current => {return [...current, goal]})
+        setgoal("")
+        event.preventDefault()
+    }
+
     function saveData(event){
         projectData.Categories = tagList
+        projectData.Roadmap = roadmap
         console.log(Categories)
         serverClient.query(
             q.Update(
@@ -85,6 +98,14 @@ function Updateproject(){
 
     console.log(tagList)
 
+    function removeGoal(id){
+
+        setroadmap((current) => {
+            return current.filter((roadmap, index) => {return index !== id})
+        })
+
+    }
+
     return(
         <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
@@ -94,7 +115,9 @@ function Updateproject(){
                 <button onClick={settingtagList} id={styles.addCategory} type="submit">Add Category</button>
                 <div>{tagList.map((current, index) => <p id={index} onClick={() => removeTag(index)} className={styles.tags} ><strong>{current}</strong></p> )}</div>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
-            <textarea className={styles.newProjectItem} onChange={settingData} name="Roadmap"           value={Roadmap}         placeholder=" Roadmap"         id={styles.Roadmap}          ></textarea>
+            <input type="text" className={styles.newProjectItem} onChange={settingGoal} name="Roadmap"           value={goal}         placeholder="Roadmap"         id={styles.Categories}          ></input>
+                <button onClick={settingroadmap} id={styles.addCategory} type="submit">Add Goal</button>
+                <div>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
     )

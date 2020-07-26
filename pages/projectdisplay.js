@@ -160,14 +160,14 @@ function Display(){
 
     function Userdisplay(props){
         return(
-            <div className={styles.display}>
+            <div className={styles.userDisplay}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
                 {username === props.Creator && (<div><Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                 <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>)}
                 <p className={styles.description}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className={styles.textHead}><strong>Roadmap</strong></h1>
-                <p className={styles.text}><strong>{props.Roadmap}</strong></p>
+                {props.Roadmap.map(each => <Tag tag={each}/>)}
                 <br />
                 <h1 className={styles.textHead}><strong>Changes</strong></h1>
                 <p className={styles.text}><strong>{props.Changes}</strong></p>

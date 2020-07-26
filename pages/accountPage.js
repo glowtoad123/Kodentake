@@ -138,21 +138,24 @@ function Accountinfo(){
 
     function Userdisplay(props){
         return(
-            <div className={styles.display}>
+            <div className={styles.userDisplay}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
                 <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                 <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                 <p className={styles.description}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className={styles.textHead}><strong>Roadmap</strong></h1>
-                <p className={styles.text}><strong>{props.Roadmap}</strong></p>
+                <br />
+                {props.Roadmap.map(each => <Tag tag={each}/>)}
                 <br />
                 <h1 className={styles.textHead}><strong>Changes</strong></h1>
-                <p className={styles.text}><strong>{props.Changes}</strong></p>
                 <br />
+                <p className={styles.text}><strong>{props.Changes}</strong></p>
                 <br />
                 
                 <p className={styles.creatorName}><strong>{props.Creator}</strong></p>
+                <br />
+                <h1 className={styles.textHead}><strong>Categories</strong></h1>
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}
             </div>)
