@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import faunadb, { query as q } from "faunadb"
 import crypto from 'crypto'
 import styles from './components/Enter.module.css'
@@ -9,6 +9,7 @@ const hash = crypto.createHash('sha256')
 function Enter(props){
 
   const [hasLoggedIn, setHasLoggedIn] = useState(true)
+  const [dataCondition, setdataCondition] = useState(false)
 
   const signfieldStyle = {
     border: 'none',
@@ -58,6 +59,7 @@ function Enter(props){
     boxShadow: "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
   }
 
+  
 
   function Login(){
 
@@ -76,7 +78,16 @@ function Enter(props){
           username: ""
       })
 
-
+      useEffect(() => {
+        {sessionStorage.getItem("dataCondition") && (
+        sessionStorage.removeItem("dataCondition"),
+        location.reload(),
+        setAccount({
+          password: "",
+          username: ""
+        })
+      )}
+  }, [])
 
     function readingProgress(event){
         var name = event.target.name
@@ -107,6 +118,10 @@ function Enter(props){
       crypto.pbkdf2(alphaPassword, 'salt', 10, 64, 'sha512', (err, derivedKey) => {
         if (err) throw err;
         setEnhancedPassword(derivedKey.toString('hex'))
+
+        console.log("username: " + username)
+        console.log("password: " + password)
+        console.log("enhancedPassword: " + derivedKey.toString('hex'))
       
       serverClient.query(
         q.Get(
@@ -222,7 +237,9 @@ function Enter(props){
       crypto.pbkdf2(alphaPassword, 'salt', 10, 64, 'sha512', (err, derivedKey) => {
           if (err) throw err;
           account.password = derivedKey.toString('hex')
-          console.log(enhancedPassword);
+          console.log("username: " + username)
+          console.log("password: " + password)
+          console.log("enhancedPassword: " + derivedKey.toString('hex'))
         
         serverClient.query(
           q.Get(
