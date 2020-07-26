@@ -142,6 +142,9 @@ function Accountinfo(){
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
                 <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                 <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
+                <a className={styles.respository} href={props.Repository}>{props.Repository}</a>
+                <br />
+                {props.Links.map(each => <a className={styles.respository} href={each}>{each}</a>)}
                 <p className={styles.description}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className={styles.textHead}><strong>Roadmap</strong></h1>
@@ -198,7 +201,9 @@ function Accountinfo(){
                 Changes={chosenOne.Changes}
                 Creator={chosenOne.Creator}
                 Categories={chosenOne.Categories}
+                Repository={chosenOne.Repository}
                 Id={chosenOne.Id}
+                Links={chosenOne.Links}
             />}
             </div>
         </div>

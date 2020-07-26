@@ -40,14 +40,29 @@
     margin-right: 10px
 }
 
+#Repository {
+    width: 300px;
+    height: 41px;
+    display: inline;
+    margin-right: 10px
+}
+
+.tagsDiv {
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+}
+
 .tags {
+    display: inline-block;
+    flex-direction: row;
     background-color: #84a98c;
     color: black;
-    display: inline;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin: 12px;
     border: none;
     border-radius: 6px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: max-content;
 }
 
 #addCategory {

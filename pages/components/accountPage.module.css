@@ -133,7 +133,7 @@
     border-radius: 12px;
     /*margin: 20px;
     margin-top: 80px;*/
-    width: 300px;
+    width: 450px;
     margin: auto;
     margin-top: 80px;
     z-index: 0;
@@ -142,6 +142,20 @@
 
 .text {
     background-color: #ffffff;
+}
+
+.respository{
+    width: max-content;
+    background-color: #2f3e46;
+    box-shadow: 0 25.6px 57.6px 0 rgba(0, 0, 0, .22), 0 4.8px 14.4px 0 rgba(0, 0, 0, .18),;
+    color: white;
+    z-index: 0;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .tags {

@@ -23,8 +23,10 @@ function Updateproject(){
         Description: "",
         Categories: [],
         Changes: "",
-        Roadmap: "",
+        Roadmap: [],
+        Repository: "",
         Creator: "",
+        Links: []
     })
     const [tagList, settagList] = useState([])
     console.log(projectData)
@@ -36,8 +38,10 @@ function Updateproject(){
     console.log(dataCondition)
     console.log(projectData.Categories)
 
-    const {Project_Title, Version_num, Description, Categories, Changes, Roadmap} = projectData
+    const {Project_Title, Version_num, Description, Categories, Creator, Changes, Roadmap, Repository} = projectData    
     const [tagName, settagName] = useState("")
+    const [link, setlink] = useState("")
+    const [linklist, setlinkList] = useState([])
     const [goal, setgoal] = useState("")
     const [roadmap, setroadmap] = useState([])
     //const [tagList, settagList] = useState(projectData.Categories)
@@ -73,9 +77,20 @@ function Updateproject(){
         event.preventDefault()
     }
 
+    function settingLink(event){
+        setlink(event.target.value)
+    }
+
+    function settingLinkList(event){
+        setlinkList(current => {return [...current, link]})
+        setlink("")
+        event.preventDefault()
+    }
+
     function saveData(event){
         projectData.Categories = tagList
         projectData.Roadmap = roadmap
+        projectData.Links = linklist
         console.log(Categories)
         serverClient.query(
             q.Update(
@@ -106,18 +121,37 @@ function Updateproject(){
 
     }
 
+    function removeLink(id){
+
+        setlinkList((current) => {
+            return current.filter((linklist, index) => {return index !== id})
+        })
+
+    }
+
     return(
         <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
             <input className={styles.newProjectItem} onChange={settingData} name="Version_num"       value={Version_num}     placeholder=" Version_num"     id={styles.Version_num}      ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
-            <input type="text" className={styles.newProjectItem} onChange={settingtagName} name="Categories"        value={tagName}      placeholder=" Categories"      id={styles.Categories}       ></input>
+            <input className={styles.newProjectItem} onChange={settingData} name="Repository"       value={Repository}     placeholder=" Repository"     id={styles.Repository}      ></input>
+            <div>   
+                <input type="text" className={styles.newProjectItem} onChange={settingtagName} name="Categories"        value={tagName}      placeholder=" Categories"      id={styles.Categories}       ></input>
                 <button onClick={settingtagList} id={styles.addCategory} type="submit">Add Category</button>
-                <div>{tagList.map((current, index) => <p id={index} onClick={() => removeTag(index)} className={styles.tags} ><strong>{current}</strong></p> )}</div>
+                <div className={styles.tagsDiv}>{tagList.map((current, index) => <p id={index} onClick={() => removeTag(index)} className={styles.tags} ><strong>{current}</strong></p> )}</div>
+            </div>
+            <br />
+            <div>
+                <input type="text" className={styles.newProjectItem} onChange={settingLink} name="Link"        value={link}      placeholder="Link"      id={styles.Repository}       ></input>
+                <button onClick={settingLinkList} id={styles.addCategory} type="submit">Add Link</button>
+                <div className={styles.tagsDiv}>{linklist.map((current, index) => <p onClick={() => removeLink(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+            </div>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
-            <input type="text" className={styles.newProjectItem} onChange={settingGoal} name="Roadmap"           value={goal}         placeholder="Roadmap"         id={styles.Categories}          ></input>
+            <div>   
+                <input type="text" className={styles.newProjectItem} onChange={settingGoal} name="Roadmap"           value={goal}         placeholder="Roadmap"         id={styles.Categories}          ></input>
                 <button onClick={settingroadmap} id={styles.addCategory} type="submit">Add Goal</button>
-                <div>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+                <div className={styles.tagsDiv}>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+            </div>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
     )
