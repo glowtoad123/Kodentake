@@ -16,23 +16,29 @@ function Newproject(){
     
     const [projectData, setProjectData] = useState({
         Project_Title: "",
-        Version_num: "",
         Description: "",
         Categories: [],
-        Changes: "",
         Roadmap: [],
         Repository: "",
         Creator: "",
-        Links: []
+        Links: [],
+        Update: [{
+            Version: "",
+            Changes: []
+        }]
     })
 
-    const {Project_Title, Version_num, Description, Categories, Creator, Changes, Roadmap, Repository} = projectData
+    const {Project_Title, Update, Description, Categories, Creator, Roadmap, Repository} = projectData
+    const [buttonCheck, setbuttonCheck] = useState(false)
     const [link, setlink] = useState("")
     const [linklist, setlinkList] = useState([])
     const [tagName, settagName] = useState("")
     const [tagList, settagList] = useState([])
     const [goal, setgoal] = useState("")
     const [roadmap, setroadmap] = useState([])
+    const [change, setchange] = useState("")
+    const [changes, setchanges] = useState([])
+    const [version, setversion] = useState("")
 
     function settingData(event){
         const name = event.target.name
@@ -72,11 +78,25 @@ function Newproject(){
         event.preventDefault()
     }
 
+    function settingChange(event){
+        setchange(event.target.value)
+    }
+
+    function settingChanges(event){
+        setchanges(current => {return [...current, change]})
+        setchange("")
+        event.preventDefault()
+    }
+
     function saveData(event){
         projectData.Categories = tagList
         projectData.Roadmap = roadmap
         projectData.Creator = username
         projectData.Links = linklist
+        projectData.Update = [{
+            Version: version,
+            Changes: changes
+        }]
         console.log(Categories)
         serverClient.query(
             q.Create(
@@ -113,10 +133,28 @@ function Newproject(){
 
     }
 
+    function removeChange(id){
+
+        setchanges((current) => {
+            return current.filter((changes, index) => {return index !== id})
+        })
+
+    }
+
+    function setVersion(event){
+        setbuttonCheck(current => !current)
+        event.preventDefault()
+    }
+
+    function settingVer(event){
+        setversion(event.target.value)
+    }
+
+
+
     return(
         <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
-            <input className={styles.newProjectItem} onChange={settingData} name="Version_num"       value={Version_num}     placeholder=" Version_num"     id={styles.Version_num}      ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
             <div>
                 <input type="text" className={styles.newProjectItem} onChange={settingtagName} name="Categories"        value={tagName}      placeholder="Categories"      id={styles.Categories}       ></input>
@@ -130,10 +168,19 @@ function Newproject(){
                 <div className={styles.tagsDiv}>{linklist.map((current, index) => <p onClick={() => removeLink(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             </div>
             <br />
-            <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <input type="text" className={styles.newProjectItem} onChange={settingGoal} name="Roadmap"           value={goal}         placeholder="Roadmap"         id={styles.Categories}          ></input>
                 <button onClick={settingroadmap} id={styles.addCategory} type="submit">Add Goal</button>
                 <div className={styles.tagsDiv}>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+                <button onClick={setVersion} id={styles.addUpdate} type="submit">Add Version</button>
+                {buttonCheck === true && (
+                    <div className={styles.versionDiv} name={Update} Value={Update}>
+                        <input className={styles.newProjectItem} onChange={settingVer} name="Version"       value={version}     placeholder=" Version #"     id={styles.Version_num}      ></input>
+                        <textarea className={styles.newProjectItem} onChange={settingChange} name="Changes"           value={change}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
+                        <button onClick={settingChanges} id={styles.addCategory} type="submit">Add Change</button>
+                        <div className={styles.tagsDiv}>{changes.map((current, index) => <p onClick={() => removeChange(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+                    </div>
+                )}
+            
             <Link href="/projectdisplay"><a href="/projectdisplay"><button onClick={saveData} id={styles.submit} type="submit">Save</button></a></Link>
         </form></div>
     )

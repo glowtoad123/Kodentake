@@ -19,31 +19,37 @@ function Updateproject(){
     console.log(username)
     const [projectData, setProjectData] = useState({
         Project_Title: "",
-        Version_num: "",
         Description: "",
         Categories: [],
-        Changes: "",
         Roadmap: [],
         Repository: "",
         Creator: "",
-        Links: []
+        Links: [],
+        Update: [{
+            Version: "",
+            Changes: []
+        }],
     })
     const [tagList, settagList] = useState([])
+    const [linklist, setlinkList] = useState([])
     console.log(projectData)
     dataCondition !== "true" && serverClient.query(
             q.Get(q.Ref(q.Collection('Projects'), refid))
         )
-        .then((ret) => {setProjectData(ret.data); setdataCondition("true"); settagList(ret.data.Categories); console.log(ret.data)})
+        .then((ret) => {setProjectData(ret.data); setdataCondition("true"); setlinkList(ret.data.Links); settagList(ret.data.Categories); console.log(ret.data)})
     
     console.log(dataCondition)
     console.log(projectData.Categories)
 
-    const {Project_Title, Version_num, Description, Categories, Creator, Changes, Roadmap, Repository} = projectData    
+    const {Project_Title, Update, Version_num, Description, Categories, Creator, Changes, Roadmap, Repository} = projectData    
+    const [buttonCheck, setbuttonCheck] = useState(false)
     const [tagName, settagName] = useState("")
     const [link, setlink] = useState("")
-    const [linklist, setlinkList] = useState([])
     const [goal, setgoal] = useState("")
     const [roadmap, setroadmap] = useState([])
+    const [change, setchange] = useState("")
+    const [changes, setchanges] = useState([])
+    const [version, setversion] = useState("")
     //const [tagList, settagList] = useState(projectData.Categories)
     //const tagList = projectData.Categories
         console.log(tagList)
@@ -87,10 +93,24 @@ function Updateproject(){
         event.preventDefault()
     }
 
+    function settingChange(event){
+        setchange(event.target.value)
+    }
+
+    function settingChanges(event){
+        setchanges(current => {return [...current, change]})
+        setchange("")
+        event.preventDefault()
+    }
+
     function saveData(event){
         projectData.Categories = tagList
         projectData.Roadmap = roadmap
         projectData.Links = linklist
+        Update.push({
+            Version: version,
+            Changes: changes
+        })
         console.log(Categories)
         serverClient.query(
             q.Update(
@@ -129,10 +149,34 @@ function Updateproject(){
 
     }
 
+    function removeChange(id){
+
+        setchanges((current) => {
+            return current.filter((changes, index) => {return index !== id})
+        })
+
+    }
+
+    function removeUpdate(id){
+        Update.forEach(function(current){
+            return current.filter((Update, index) => {return index !== id})
+        })
+    }
+    const changeLog = Update.map(project => project.Changes)
+    console.log(Update)
+
+    function setVersion(event){
+        setbuttonCheck(current => !current)
+        event.preventDefault()
+    }
+
+    function settingVer(event){
+        setversion(event.target.value)
+    }
+
     return(
         <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
-            <input className={styles.newProjectItem} onChange={settingData} name="Version_num"       value={Version_num}     placeholder=" Version_num"     id={styles.Version_num}      ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
             <input className={styles.newProjectItem} onChange={settingData} name="Repository"       value={Repository}     placeholder=" Repository"     id={styles.Repository}      ></input>
             <div>   
@@ -146,12 +190,21 @@ function Updateproject(){
                 <button onClick={settingLinkList} id={styles.addCategory} type="submit">Add Link</button>
                 <div className={styles.tagsDiv}>{linklist.map((current, index) => <p onClick={() => removeLink(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             </div>
-            <textarea className={styles.newProjectItem} onChange={settingData} name="Changes"           value={Changes}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
             <div>   
                 <input type="text" className={styles.newProjectItem} onChange={settingGoal} name="Roadmap"           value={goal}         placeholder="Roadmap"         id={styles.Categories}          ></input>
                 <button onClick={settingroadmap} id={styles.addCategory} type="submit">Add Goal</button>
                 <div className={styles.tagsDiv}>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             </div>
+            <button onClick={setVersion} id={styles.addUpdate} type="submit">Add Version</button>
+            {buttonCheck === true && (
+                    <div className={styles.versionDiv} name={Update} Value={Update}>
+                        <input className={styles.newProjectItem} onChange={settingVer} name="Version"       value={version}     placeholder=" Version #"     id={styles.Version_num}      ></input>
+                        <textarea className={styles.newProjectItem} onChange={settingChange} name="Changes"           value={change}         placeholder=" Changes"         id={styles.Changes}          ></textarea>
+                        <button onClick={settingChanges} id={styles.addCategory} type="submit">Add Change</button>
+                        <div className={styles.tagsDiv}>{changes.map((current, index) => <p onClick={() => removeChange(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
+                    </div>
+                )}
+            {Update.length > 0 && Update.map((current, index) => {return (<div onClick={() => removeUpdate(index)}><h2>Version {current.Version}</h2><h3>Changelog</h3>{changeLog[index].map(one => <p>{one}</p>)}</div>)})}
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
     )

@@ -80,6 +80,18 @@
         box-shadow: none;
     }
 
+#addUpdate {
+    display: inline;
+    border: none;
+    border-radius: 6px;
+    background-color: #2f3e46;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    padding: 20px;
+}
+
 #Roadmap {
     width: inherit;
     height: 177px; 
@@ -91,6 +103,12 @@
     height: 177px;
     border-radius: 0;
 
+}
+
+.versionDiv {
+    background-color: #b3c1b1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: max-content;
 }
 
 .newProjectItem {
