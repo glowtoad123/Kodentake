@@ -195,7 +195,8 @@ function Updateproject(){
                 <button onClick={settingroadmap} id={styles.addCategory} type="submit">Add Goal</button>
                 <div className={styles.tagsDiv}>{roadmap.map((current, index) => <p onClick={() => removeGoal(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
             </div>
-            <button onClick={setVersion} id={styles.addUpdate} type="submit">Add Version</button>
+            <br />
+            <center><button onClick={setVersion} id={styles.addUpdate} type="submit">Add Version</button></center>
             {buttonCheck === true && (
                     <div className={styles.versionDiv} name={Update} Value={Update}>
                         <input className={styles.newProjectItem} onChange={settingVer} name="Version"       value={version}     placeholder=" Version #"     id={styles.Version_num}      ></input>
@@ -204,7 +205,7 @@ function Updateproject(){
                         <div className={styles.tagsDiv}>{changes.map((current, index) => <p onClick={() => removeChange(index)} className={styles.tags}><strong>{current}</strong></p>)}</div>
                     </div>
                 )}
-            {Update.length > 0 && Update.map((current, index) => {return (<div onClick={() => removeUpdate(index)}><h2>Version {current.Version}</h2><h3>Changelog</h3>{changeLog[index].map(one => <p>{one}</p>)}</div>)})}
+            <div className={styles.updateList}>{Update.length > 0 && Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2>Version {current.Version}</h2><h3 className={styles.changelogLabel}>Changelog</h3><br />{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div>)})}</div>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
     )

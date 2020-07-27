@@ -137,6 +137,9 @@ function Accountinfo(){
 
 
     function Userdisplay(props){
+
+        const changeLog = chosenOne.Update.map(project => project.Changes)
+
         return(
             <div className={styles.userDisplay}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
@@ -161,6 +164,8 @@ function Accountinfo(){
                 <h1 className={styles.textHead}><strong>Categories</strong></h1>
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}
+                <br />
+                <div className={styles.updateList}>{props.Update.length > 0 && props.Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2>Version {current.Version}</h2><h3 className={styles.changelogLabel}>Changelog</h3><br /><div className={styles.changeDiv}>{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div></div>)})}</div>
             </div>)
     }
 
@@ -204,6 +209,7 @@ function Accountinfo(){
                 Repository={chosenOne.Repository}
                 Id={chosenOne.Id}
                 Links={chosenOne.Links}
+                Update={chosenOne.Update}
             />}
             </div>
         </div>
