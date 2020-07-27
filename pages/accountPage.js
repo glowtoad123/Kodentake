@@ -165,7 +165,7 @@ function Accountinfo(){
                 <br />
                 {props.Categories.map(each => <Tag tag={each}/>)}
                 <br />
-                <div className={styles.updateList}>{props.Update.length > 0 && props.Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2>Version {current.Version}</h2><h3 className={styles.changelogLabel}>Changelog</h3><br /><div className={styles.changeDiv}>{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div></div>)})}</div>
+                <div className={styles.updateList}>{props.Update.length > 0 && props.Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2 className={styles.textHead}>Version {current.Version}</h2><br /><h3 className={styles.changelogLabel}>Changelog</h3><br /><div className={styles.changeDiv}>{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div></div>)})}</div>
             </div>)
     }
 
