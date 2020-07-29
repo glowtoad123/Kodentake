@@ -60,7 +60,7 @@ function Navbar(){
 
     return(
         <div className="styles.navbar" style={NavbarStyle}>
-            <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="takes" /></a></Link>
+            <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="projects" /></a></Link>
             <Link href="/newProject"><a href="/newProject"><Navprop pic='/plus.svg' description="add" /></a></Link>
             {userId.length > 0 && <Link href={`/accountPage?title=${userId}`}><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>}
             <Link href="/enter"><a href="/enter"><Navprop pic='/login.svg' description="login/switch account" /></a></Link>
