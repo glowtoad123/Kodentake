@@ -40,7 +40,8 @@ function Navbar(){
 
     const [currentScrollPos, setCurrentScrollPos] = useState("")
     const [hasMoved, setHasMoved] = useState(true)
-  
+    const [username, setusername] = useState("")
+    const [userId, setuserId] = useState("")
     useEffect(() => {var prevScrollPos = window.pageYOffset;
     window.onscroll = function() {
         var currentScrollPos = window.pageYOffset;
@@ -50,7 +51,9 @@ function Navbar(){
           setHasMoved(true)
         }
         prevScrollPos = currentScrollPos;
-    } 
+    }, 
+    sessionStorage.getItem("username") && setusername(sessionStorage.getItem("username"))
+    sessionStorage.getItem("userId") && setuserId(sessionStorage.getItem("userId"))
 })
     hasMoved && (NavbarStyle.display = "none")
     !hasMoved && (NavbarStyle.display = "inline-block")
@@ -59,9 +62,10 @@ function Navbar(){
         <div className="styles.navbar" style={NavbarStyle}>
             <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="takes" /></a></Link>
             <Link href="/newProject"><a href="/newProject"><Navprop pic='/plus.svg' description="add" /></a></Link>
-            <Link href="/accountPage"><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>
+            {userId.length > 0 && <Link href={`/accountPage?title=${userId}`}><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>}
             <Link href="/enter"><a href="/enter"><Navprop pic='/login.svg' description="login/switch account" /></a></Link>
-            {/*<Navprop pic='/favorite.svg' description="favorites" />
+            {/*<Link href="/accountPage"><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>
+            <Navprop pic='/favorite.svg' description="favorites" />
             <Navprop pic='/notification.svg' description="updates" />
             <Navprop pic='/settings.svg' description="settings" />*/}
         </div>

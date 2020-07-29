@@ -20,7 +20,6 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar />
       {!username ? <Enter /> : <Display />}
     </div>
 

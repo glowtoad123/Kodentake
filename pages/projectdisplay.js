@@ -5,12 +5,13 @@ import faunadb, { query as q } from "faunadb"
 import Navbar from './navbar'
 import Link from 'next/link'
 import styles from './components/accountPage.module.css'
+import url from 'url'
+import { getURL } from 'next/dist/next-server/lib/utils'
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     const [chosenOne, setChosenOne] = useState("nothing")
-
     function choseOne(event){
         serverClient.query(
             q.Get(
@@ -128,6 +129,7 @@ function Display(){
      useEffect(() => {
         setusername(sessionStorage.getItem("username")),
         console.log(username),
+        console.log(getURL())
         sessionStorage.setItem("dataCondition", false)
     })
 

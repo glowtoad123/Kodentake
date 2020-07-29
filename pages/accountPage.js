@@ -4,6 +4,7 @@ import Navbar from './navbar'
 import Link from 'next/link'
 import styles from './components/accountPage.module.css'
 import crypto from 'crypto'
+import { getURL } from 'next/dist/next-server/lib/utils'
 
 
 function Accountinfo(){
@@ -14,13 +15,24 @@ function Accountinfo(){
     const [chosenId, setchosenId] = useState("")
     const [refid, setrefid] = useState("")
     const [userName, setuserName] = useState("")
+    const [urlName, seturlName] = useState("")
+    const [yourWorks, setyourWorks] = useState("")
+    const [receivedKey, setreceivedKey] = useState("")
+
 
     useEffect(() => {
-        setuserName(sessionStorage.getItem("username"));
+        //setuserName(sessionStorage.getItem("username"));
         sessionStorage.setItem("dataCondition", false)
+        console.log(getURL())
+        seturlName(getURL())
+        setyourWorks(sessionStorage.getItem("yourWorks"))
     })
 
-    
+    const userId = urlName.slice(19, urlName.length)
+
+    userName.length === 0 && serverClient.query(
+        q.Get(q.Ref(q.Collection("Accounts"), userId))
+    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password)})
 
     worksIdArray.length === 0 && serverClient.query(
         q.Map(
@@ -28,11 +40,10 @@ function Accountinfo(){
             q.Lambda("X", q.Get(q.Var("X")))
           )
     ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
-    
 
-    refid.length === 0 && serverClient.query(
+    /*refid.length === 0 && serverClient.query(
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
-    ).then((ret, Index) => {setrefid(ret.ref.id)})
+    ).then((ret, Index) => {setrefid(ret.ref.id)})*/
 
     const taggies = projectsArray.map(current => current.Categories)
 
@@ -59,7 +70,7 @@ function Accountinfo(){
                       .then((ret) => {console.log(ret.data.username); alert("Sorry, but this username has alread been taken")}, (err) => {
                         serverClient.query(
                             q.Update(
-                              q.Ref(q.Collection("Accounts"), refid),
+                              q.Ref(q.Collection("Accounts"), userId),
                               { data: {
                                   username: changeuserName,
                                   password: derivedKey.toString('hex')
@@ -143,8 +154,8 @@ function Accountinfo(){
         return(
             <div className={styles.userDisplay}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
-                <Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
-                <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
+                {yourWorks === receivedKey && <div><Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>}
                 <a className={styles.respository} href={props.Repository}>{props.Repository}</a>
                 <br />
                 {props.Links.map(each => <a className={styles.respository} href={each}>{each}</a>)}
@@ -180,8 +191,8 @@ function Accountinfo(){
             <Navbar />
             <div className={styles.head}>
             <h1 className={styles.displaytitle}><strong>{userName}</strong></h1>
-                <Link  className={styles.save}
-                 href="/accountPage"><a href="/accountPage"><img src="/edit.svg" className={styles.save} onClick={updateName}/></a></Link>
+                {yourWorks === receivedKey && <Link  className={styles.save}
+                 href={`/accountPage?title=${userId}`}><a href="/accountPage"><img src="/edit.svg" className={styles.save} onClick={updateName}/></a></Link>}
                 
             </div>
             <div>
@@ -194,10 +205,10 @@ function Accountinfo(){
                     <p className={styles.creatorname}><strong>{Current.Creator}</strong></p>
                     <br />
                     <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
-                    <div className={styles.projectFooter}>
+                    {yourWorks === receivedKey && (<div className={styles.projectFooter}>
                         <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                         <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
-                    </div>
+                    </div>)}
             </div>)}) : 
             <Userdisplay 
                 Project_Title= {chosenOne.Project_Title}
