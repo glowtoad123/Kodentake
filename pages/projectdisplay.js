@@ -10,7 +10,7 @@ import { getURL } from 'next/dist/next-server/lib/utils'
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
-    const [allInfo, setallInfo] = useState([])
+    //const [receivedKeys, setreceivedKeys] = useState([])
     const [yourWorks, setyourWorks] = useState("")
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     const [chosenOne, setChosenOne] = useState("nothing")
@@ -38,6 +38,28 @@ function Display(){
     ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data))})
 
     const taggies = projectArray.map(project => project.Categories)
+/*     const creators = projectArray.map(project => project.Creator)
+    const [keyCheck, setkeyCheck] = useState(true)
+
+    console.log(creators)
+
+    keyCheck && creators.map(name => {serverClient.query(
+        q.Map(
+            q.Paginate(q.Match(q.Index("dublicateUsername"), name)),
+            q.Lambda("X", q.Get(q.Var("X")))
+        )
+    ).then(ret => {ret.data.map(key => {
+        setreceivedKeys(current => {return [...current, {Key: key.ref.id, username: key.data.username}]})
+            }), 
+            setkeyCheck(false)
+        })}
+    )
+    console.log(receivedKeys)
+    const keys = receivedKeys.slice(0, creators.length)
+
+    keys.map((key, index) => {return creators[index] === key.username[index]})
+
+    console.log(keys) */
 
     const [searchValue, setsearchValue] = useState("")
     const [searchTagsList, setsearchTagsList] = useState([])
@@ -96,7 +118,7 @@ function Display(){
                 <br />
                 <br />
                 
-                <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
+                <Link href={`/accountPage?title=${project.Creator}`}><a className={styles.creatorName}><strong>{project.Creator}</strong></a></Link>
                 <br />
                 <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
             </div>)})
@@ -114,7 +136,7 @@ function Display(){
                 <br />
                 <br />
                 
-                <p className={styles.creatorname}><strong>{project.Creator}</strong></p>
+                <p className={styles.creatorName}><strong>{project.Creator}</strong></p>
                 <br />
                 <div className={styles.tagDiv}>{tagList[index].map(each => <Tag tag={each}/>)}</div>
             </div>)})
@@ -170,6 +192,8 @@ function Display(){
         return(
             <div className={styles.userDisplay}>
                 <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
+                {username === props.Creator && (<div><Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>)}
                 <p className={styles.description}><strong>{props.Description}</strong></p>
                 <br />
                 <h1 className={styles.textHead}><strong>Roadmap</strong></h1>

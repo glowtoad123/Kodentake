@@ -18,6 +18,8 @@ function Accountinfo(){
     const [urlName, seturlName] = useState("")
     const [yourWorks, setyourWorks] = useState("")
     const [receivedKey, setreceivedKey] = useState("")
+    const [altId, setaltId] = useState("")
+    const [spaceCheck, setspaceCheck] = useState(true)
 
 
     useEffect(() => {
@@ -29,10 +31,20 @@ function Accountinfo(){
     })
 
     const userId = urlName.slice(19, urlName.length)
+    userId.includes("%20") && spaceCheck ? (setspaceCheck(false), setaltId(userId.replace("%20", " "))) : console.log("all good")
+    console.log(altId)
 
     userName.length === 0 && serverClient.query(
         q.Get(q.Ref(q.Collection("Accounts"), userId))
-    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password)})
+    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password)}, (err) => {
+        serverClient.query(
+            q.Get(q.Match(q.Index("dublicateUsername"), userId))
+        ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password)}, (err) => {
+            serverClient.query(
+                q.Get(q.Match(q.Index("dublicateUsername"), altId))
+            ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password)})
+        })
+    })
 
     worksIdArray.length === 0 && serverClient.query(
         q.Map(
@@ -202,7 +214,7 @@ function Accountinfo(){
                     <br />
                     <br />
                     
-                    <p className={styles.creatorname}><strong>{Current.Creator}</strong></p>
+                    <p className={styles.creatorName}><strong>{Current.Creator}</strong></p>
                     <br />
                     <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
                     {yourWorks === receivedKey && (<div className={styles.projectFooter}>
