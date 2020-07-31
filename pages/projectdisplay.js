@@ -113,7 +113,7 @@ function Display(){
         return(
 
             projectArray.map((project, index) => {return (<div className={styles.display}>
-                <h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1>
+                <Link href={`/project?title=${project.Project_Title}`}><a><h1 onClick={choseOne} className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
                 <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
                 <br />
@@ -234,16 +234,7 @@ function Display(){
                 </div>
             </div>    
         </div>
-        {chosenOne === "nothing" && queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 ? <Querieddisplay /> : <Userdisplay 
-        Project_Title= {chosenOne.Project_Title}
-        Description= {chosenOne.Description}
-        Roadmap={chosenOne.Roadmap}
-        Changes={chosenOne.Changes}
-        Creator={chosenOne.Creator}
-        Categories={chosenOne.Categories}
-        Id={chosenOne.Id}
-        Update={chosenOne.Update}
-        />}</div>
+        {chosenOne === "nothing" && queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 && <Querieddisplay />}</div>
     )
 }
 
