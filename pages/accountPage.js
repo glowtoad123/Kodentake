@@ -116,13 +116,6 @@ function Accountinfo(){
 
     }
 
-    function choseOne(event){
-        chosenOne === "nothing" && serverClient.query(
-            q.Get(
-            q.Match(q.Index("Project_Title"), event.target.innerText)
-        )).then((ret, index) => {console.log(ret); setChosenOne(ret.data);})
-    }
-
     function setRef(event){
         serverClient.query(
             q.Get(
@@ -157,41 +150,6 @@ function Accountinfo(){
 
     }
 
-
-
-    function Userdisplay(props){
-
-        const changeLog = chosenOne.Update.map(project => project.Changes)
-
-        return(
-            <div className={styles.userDisplay}>
-                <h1 onClick={choseOne} className="displaytitle"><strong>{props.Project_Title}</strong></h1>
-                {yourWorks === receivedKey && <div><Link href="/updateProject"><a href="/updateProject"><img id={props.Id} onClick={setRef} title={props.description} name={props.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
-                <img name={props.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>}
-                <a className={styles.respository} href={props.Repository}>{props.Repository}</a>
-                <br />
-                {props.Links.map(each => <a className={styles.respository} href={each}>{each}</a>)}
-                <p className={styles.description}><strong>{props.Description}</strong></p>
-                <br />
-                <h1 className={styles.textHead}><strong>Roadmap</strong></h1>
-                <br />
-                {props.Roadmap.map(each => <Tag tag={each}/>)}
-                <br />
-                <h1 className={styles.textHead}><strong>Changes</strong></h1>
-                <br />
-                <p className={styles.text}><strong>{props.Changes}</strong></p>
-                <br />
-                
-                <p className={styles.creatorName}><strong>{props.Creator}</strong></p>
-                <br />
-                <h1 className={styles.textHead}><strong>Categories</strong></h1>
-                <br />
-                {props.Categories.map(each => <Tag tag={each}/>)}
-                <br />
-                <div className={styles.updateList}>{props.Update.length > 0 && props.Update.map((current, index) => {return (<div className={styles.update}><h2 className={styles.textHead}>Version {current.Version}</h2><br /><h3 className={styles.changelogLabel}>Changelog</h3><br /><div className={styles.changeDiv}>{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div></div>)})}</div>
-            </div>)
-    }
-
     function Tag(props){
         return(
             <p className={styles.tags}><strong>{props.tag}</strong></p>
@@ -208,8 +166,8 @@ function Accountinfo(){
                 
             </div>
             <div>
-                {chosenOne === "nothing" ? projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
-                    <h1 onClick={choseOne} className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1>
+                {projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
+                    <Link href={`/project?title=${Current.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
                     <div className={styles.descriptionDiv}><strong >{Current.Description}</strong></div>
                     <br />
                     <br />
@@ -221,19 +179,7 @@ function Accountinfo(){
                         <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                         <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                     </div>)}
-            </div>)}) : 
-            <Userdisplay 
-                Project_Title= {chosenOne.Project_Title}
-                Description= {chosenOne.Description}
-                Roadmap={chosenOne.Roadmap}
-                Changes={chosenOne.Changes}
-                Creator={chosenOne.Creator}
-                Categories={chosenOne.Categories}
-                Repository={chosenOne.Repository}
-                Id={chosenOne.Id}
-                Links={chosenOne.Links}
-                Update={chosenOne.Update}
-            />}
+            </div>)})}
             </div>
         </div>
     )
