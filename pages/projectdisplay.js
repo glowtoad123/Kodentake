@@ -15,7 +15,6 @@ function Display(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
 
 
-
     function Tag(props){
         return(
             <p className={styles.tags}><strong>{props.tag}</strong></p>
@@ -57,18 +56,24 @@ function Display(){
     const [searchValue, setsearchValue] = useState("")
     const [searchTagsList, setsearchTagsList] = useState([])
     const [queriedList, setqueriedList] = useState([])
+    const [selection, setSelection] = useState("")
+
+    console.log(selection)
 
     function settingsearchValue(event){
         setsearchValue(event.target.value)
+        setSelection(document.getElementById("searchtype").value)
     }
 
     function settingsearchList(){
         var selection = document.getElementById("searchtype")
-        if(selection.value === "tags"){
+        if(selection.value === "categories"){
             setsearchTagsList(none => {return [...none, searchValue]})
             setsearchValue("")
         }
     }
+    const categorySearchList = searchTagsList.join(" ")
+    console.log("categorySearchList: " + categorySearchList)
 
 
     function findProjects(){
@@ -82,7 +87,7 @@ function Display(){
             }
         }
 
-        if(selection.value === "tags"){
+        if(selection.value === "categories"){
             const searchResults = searchTagsList.map(one => projectArray.filter(each => each.Categories.includes(one)))
             const finalResults = []
             const enhancedResults = searchResults.map(queriedProjectLists => queriedProjectLists.filter(project => finalResults.push(project)))
@@ -136,7 +141,10 @@ function Display(){
     )}
 
 
-
+    useEffect(() => {
+        sessionStorage.setItem("dataCondition", false)
+        sessionStorage.setItem("selection", selection)
+    })
 
 
     return(
@@ -144,9 +152,10 @@ function Display(){
         <div className="search">
             <input type="search" placeholder="search" className="searchfield" value={searchValue} onChange={settingsearchValue}/>
             <img src="/plus.svg" className={styles.button} onClick={settingsearchList}/>
-            <img src="/search.png" className={styles.button} onClick={findProjects}/>
+            {(selection === "title" || selection === "description") && <Link href={`queriedResults?title=${searchValue}`}><a><img src="/search.png" className={styles.button}/></a></Link>}
+            {selection === "categories" && <Link href={`queriedResults?title=${searchTagsList.join(" ")}`}><a><img src="/search.png" className={styles.button}/></a></Link>}
             <select id="searchtype" class={styles.searchtype}>
-                <option id="1" value="tags">tags</option>
+                <option id="1" value="categories">categories</option>
                 <option id="2" value="title">title</option>
                 <option id="3" value="description">description</option>
             </select>
@@ -158,7 +167,9 @@ function Display(){
                 </div>
             </div>    
         </div>
-        {queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 && <Querieddisplay />}</div>
+        {/* queriedList.length == 0 ? <Displayprop /> : queriedList.length > 0 && <Querieddisplay /> */}
+        <Displayprop />
+        </div>
     )
 }
 
