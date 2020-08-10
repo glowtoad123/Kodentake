@@ -10,7 +10,9 @@
   "dependencies": {
     "cookie": "^0.4.1",
     "faunadb": "^2.14.2",
+    "idb": "^5.0.4",
     "next": "9.4.4",
+    "next-pwa": "^3.1.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "window": "^4.2.7"

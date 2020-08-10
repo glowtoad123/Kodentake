@@ -7,6 +7,7 @@ import Link from 'next/link'
 import styles from './components/accountPage.module.css'
 import url from 'url'
 import { getURL } from 'next/dist/next-server/lib/utils'
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
@@ -21,13 +22,35 @@ function Display(){
         )
     }
 
-
     projectArray.length == 0 && serverClient.query(
         q.Map(
             q.Paginate(q.Match(q.Index("projects"))),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data))})
+    ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data),
+        /* idb.open('projectList', 1, function(upgradeDB) {
+            var store = IDBTransaction("projects", "readwrite")
+            var storing = store.objectStore('projects', {autoIncrement: true});
+            storing.add(ret.data.map(project => project.data));    
+        }) */
+        )})
+
+        async function doDatabaseStuff() {
+            console.log("await is working")
+            const db = await openDB("projectList", 1, {
+                upgrade(db){
+                    const store = db.createObjectStore("projects", {
+                        keyPath: "id",
+                        autoIncrement: true,
+                    })
+
+                    
+                }
+            });
+            await db.add("projects", projectArray)
+        }
+
+        doDatabaseStuff()
 
     const taggies = projectArray.map(project => project.Categories)
 /*     const creators = projectArray.map(project => project.Creator)
