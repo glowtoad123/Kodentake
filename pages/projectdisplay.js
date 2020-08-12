@@ -11,6 +11,9 @@ import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
+    const [indexedArray, setindexedArray] = useState([])
+    const [indexedCheck, setindexedCheck] = useState(true)
+    const [networkStatus, setnetworkStatus] = useState(false)
     //const [receivedKeys, setreceivedKeys] = useState([])
     const [yourWorks, setyourWorks] = useState("")
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
@@ -27,30 +30,52 @@ function Display(){
             q.Paginate(q.Match(q.Index("projects"))),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data),
+    ).then(ret => {
+        setProjectArray(ret.data.map(project => project.data)), 
+        console.log(ret.data.map(project => project.data),
+        setnetworkStatus(true)
+        )})
+
+        
         /* idb.open('projectList', 1, function(upgradeDB) {
             var store = IDBTransaction("projects", "readwrite")
             var storing = store.objectStore('projects', {autoIncrement: true});
             storing.add(ret.data.map(project => project.data));    
         }) */
-        )})
 
         async function doDatabaseStuff() {
             console.log("await is working")
-            const db = await openDB("projectList", 1, {
-                upgrade(db){
-                    const store = db.createObjectStore("projects", {
-                        keyPath: "id",
-                        autoIncrement: true,
-                    })
-
-                    
-                }
+            await deleteDB("projectList", {
+                blocked(){}
             });
-            await db.add("projects", projectArray)
+            const db = await openDB("projectList", 1, {
+                 upgrade(db){
+                    const store = db.createObjectStore("projects", {
+                        keyPath: "id", autoIncrement: true})
+                    
+                },
+            })
+                await db.add("projects", projectArray)
+                console.log(await db.getAll("projects"))
+                setindexedArray(await db.getAll("projects"))
+                setnetworkStatus(false)
+                setindexedCheck(false)
         }
 
-        doDatabaseStuff()
+
+        async function getindexedData() {
+            console.log("await is working")
+            const db = await openDB("projectList", 1, {
+                upgrade(){}
+            });
+             console.log(await db.getAll("projects")) 
+             setindexedArray(await db.getAll("projects"))
+             setnetworkStatus(false)
+        }
+
+        networkStatus && indexedCheck && doDatabaseStuff()
+        !networkStatus && getindexedData() 
+
 
     const taggies = projectArray.map(project => project.Categories)
 /*     const creators = projectArray.map(project => project.Creator)
@@ -130,10 +155,14 @@ function Display(){
         }
     }
 
+    console.log(networkStatus)
+    console.log(indexedArray)
+    console.log(projectArray)
+
     function Displayprop() {
         return(
-
-            projectArray.map((project, index) => {return (<div className={styles.display}>
+            <>
+            {networkStatus && projectArray.map((project, index) => {return (<div className={styles.display}>
                 <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
                 <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
@@ -142,7 +171,20 @@ function Display(){
                 <Link href={`/accountPage?title=${project.Creator}`}><a className={styles.creatorName}><strong>{project.Creator}</strong></a></Link>
                 <br />
                 <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
-            </div>)})
+            </div>)})}
+
+            {!networkStatus && indexedArray.map(array => array.map((project, index) => {return (<div className={styles.display}>
+                <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
+                <h1>afdsfcdsafdsfa</h1>
+                <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
+                <br />
+                <br />
+                
+                <Link href={`/accountPage?title=${project.Creator}`}><a className={styles.creatorName}><strong>{project.Creator}</strong></a></Link>
+                <br />
+                <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
+            </div>)}))}
+            </>
         )
     }
 
