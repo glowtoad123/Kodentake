@@ -5,11 +5,13 @@ import Link from 'next/link'
 import styles from './components/accountPage.module.css'
 import crypto from 'crypto'
 import { getURL } from 'next/dist/next-server/lib/utils'
+import * as localForage from "localforage"
 
 
 function Accountinfo(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     const [projectsArray, setprojectsArray] = useState([])
+    const [indexedArray, setindexedArray] = useState([])
     const [worksIdArray, setworksIdArray] = useState([])
     const [chosenOne, setChosenOne] = useState("nothing")
     const [chosenId, setchosenId] = useState("")
@@ -20,6 +22,8 @@ function Accountinfo(){
     const [receivedKey, setreceivedKey] = useState("")
     const [altId, setaltId] = useState("")
     const [spaceCheck, setspaceCheck] = useState(true)
+    const [networkStatus, setnetworkStatus] = useState(false)
+    const [foragedData, setforagedData] = useState(false)
 
 
     useEffect(() => {
@@ -36,13 +40,13 @@ function Accountinfo(){
 
     userName.length === 0 && serverClient.query(
         q.Get(q.Ref(q.Collection("Accounts"), userId))
-    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password)}, (err) => {
+    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
         serverClient.query(
             q.Get(q.Match(q.Index("dublicateUsername"), userId))
-        ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password)}, (err) => {
+        ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
             serverClient.query(
                 q.Get(q.Match(q.Index("dublicateUsername"), altId))
-            ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password)})
+            ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)})
         })
     })
 
@@ -51,13 +55,22 @@ function Accountinfo(){
             q.Paginate(q.Match(q.Index("creatorsworks"), userName)),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data))})
+    ).then((ret, index) => {console.log(ret); setworksIdArray(ret.data.map(work => work.ref.id)); setprojectsArray(ret.data.map(project => project.data)); localForage.setItem("accountProjects", ret.data.map(project => project.data))})
 
     /*refid.length === 0 && serverClient.query(
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
     ).then((ret, Index) => {setrefid(ret.ref.id)})*/
 
+    if (!foragedData && yourWorks === receivedKey) {localForage.getItem("accountProjects").then(project => {setindexedArray(project); setforagedData(true)}).then(
+        ret => console.log("got data")
+    ).catch(err => console.log(err))}
     const taggies = projectsArray.map(current => current.Categories)
+
+    var tagArray = []
+
+    if (foragedData && indexedArray !== null){
+        tagArray = indexedArray.map(project => project.Categories)
+    }
 
 
     function updateName(event){
@@ -166,7 +179,7 @@ function Accountinfo(){
                 
             </div>
             <div>
-                {projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
+                {networkStatus && projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
                     <Link href={`/project?title=${Current.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
                     <div className={styles.descriptionDiv}><strong >{Current.Description}</strong></div>
                     <br />
@@ -179,7 +192,23 @@ function Accountinfo(){
                         <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                         <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                     </div>)}
-            </div>)})}
+                </div>)})}
+
+                {!networkStatus && foragedData && indexedArray !== null && indexedArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
+                    <Link href={`/project?title=${Current.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
+                    <div className={styles.descriptionDiv}><strong >{Current.Description}</strong></div>
+                    <br />
+                    <br />
+                    
+                    <p className={styles.creatorName}><strong>{Current.Creator}</strong></p>
+                    <br />
+                    <div className={styles.tagDiv}>{tagArray[index].map(each => <Tag tag={each}/>)}</div>
+                    {yourWorks === receivedKey && (<div className={styles.projectFooter}>
+                        <img src="/offline.svg" className={styles.delete} />
+                        <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
+                        <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                    </div>)}
+                </div>)})}
             </div>
         </div>
     )

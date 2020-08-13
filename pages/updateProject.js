@@ -13,6 +13,7 @@ function Updateproject(){
     useEffect(() => {
         setrefid(sessionStorage.getItem("ref"));
         setusername(sessionStorage.getItem("username"));
+        setdataCondition("false")
         //setdataCondition(sessionStorage.getItem("dataCondition"))
     })
     console.log("refid: " + refid)

@@ -97,7 +97,7 @@ function Enter(props){
             <div name={hasLoggedIn} className={styles.signbox}>
               <input onChange={readingProgress} className={styles.signfield} value={username} type="text"    name="username" id={username}  placeholder="username" />
               <input onChange={readingProgress} className={styles.signfield} value={password}    type="password" name="password"    id={password} placeholder="password" />
-              <Link href="/projectdisplay"><a><button className={styles.submit} onClick={readAccount}>Login</button></a></Link>
+              <Link href="/projectdisplay"><a href="/projectdisplay"><button className={styles.submit} onClick={readAccount}>Login</button></a></Link>
             </div>
     )
   }

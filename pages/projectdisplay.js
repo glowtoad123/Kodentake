@@ -7,14 +7,20 @@ import Link from 'next/link'
 import styles from './components/accountPage.module.css'
 import url from 'url'
 import { getURL } from 'next/dist/next-server/lib/utils'
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
+import { openDB, deleteDB, wrap, unwrap } from 'idb'
+import * as localForage from "localforage"
+
 
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
+    const [indexedArray, setindexedArray] = useState([])
+    const [networkStatus, setnetworkStatus] = useState(false)
+    const [foragedData, setforagedData] = useState(false)
     //const [receivedKeys, setreceivedKeys] = useState([])
     const [yourWorks, setyourWorks] = useState("")
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
 
+    
 
     function Tag(props){
         return(
@@ -27,32 +33,41 @@ function Display(){
             q.Paginate(q.Match(q.Index("projects"))),
             q.Lambda("X", q.Get(q.Var("X")))
           )
-    ).then(ret => {setProjectArray(ret.data.map(project => project.data)), console.log(ret.data.map(project => project.data),
+    ).then(ret => {
+        setProjectArray(ret.data.map(project => project.data)), 
+        console.log(ret.data.map(project => project.data),
+        localForage.setItem("projectList", ret.data.map(project => project.data)).then(ret => console.log("has been set")).catch(err => console.log(err)),
+        setnetworkStatus(true)
+        )})
+
+    console.log(indexedArray)
+
+    !foragedData && localForage.getItem("projectList").then(project => {setindexedArray(project); setforagedData(true)}).then(
+        ret => console.log("got data")
+    ).catch(err => console.log(err))
+
+
+    
+    
         /* idb.open('projectList', 1, function(upgradeDB) {
             var store = IDBTransaction("projects", "readwrite")
             var storing = store.objectStore('projects', {autoIncrement: true});
             storing.add(ret.data.map(project => project.data));    
         }) */
-        )})
 
-        async function doDatabaseStuff() {
-            console.log("await is working")
-            const db = await openDB("projectList", 1, {
-                upgrade(db){
-                    const store = db.createObjectStore("projects", {
-                        keyPath: "id",
-                        autoIncrement: true,
-                    })
 
-                    
-                }
-            });
-            await db.add("projects", projectArray)
-        }
+        console.log(indexedArray)
 
-        doDatabaseStuff()
+        var tagArray = []
+
+    if (foragedData && indexedArray !== null){
+        tagArray = indexedArray.map(project => project.Categories)
+    }
+
+        
 
     const taggies = projectArray.map(project => project.Categories)
+    
 /*     const creators = projectArray.map(project => project.Creator)
     const [keyCheck, setkeyCheck] = useState(true)
 
@@ -130,10 +145,12 @@ function Display(){
         }
     }
 
+    console.log("networkStatus: " + networkStatus)
+
     function Displayprop() {
         return(
-
-            projectArray.map((project, index) => {return (<div className={styles.display}>
+            <>
+            {networkStatus && projectArray.map((project, index) => {return (<div className={styles.display}>
                 <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
                 <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
@@ -142,7 +159,24 @@ function Display(){
                 <Link href={`/accountPage?title=${project.Creator}`}><a className={styles.creatorName}><strong>{project.Creator}</strong></a></Link>
                 <br />
                 <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
-            </div>)})
+            </div>)})}
+            {!networkStatus && foragedData && indexedArray !== null && indexedArray.map((project, index) => {return (<div className={styles.display}>
+                <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
+                
+                <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
+                <br />
+                <br />
+                
+                <Link href={`/accountPage?title=${project.Creator}`}><a className={styles.creatorName}><strong>{project.Creator}</strong></a></Link>
+                <br />
+                <div className={styles.tagDiv}>{tagArray[index].map(each => <Tag tag={each}/>)}</div>
+                <img style={{
+                    width: '48px', 
+                    height: '48px',
+                    marginRight: '20px',
+                    }} className="navpic" src="/offline.svg" />
+            </div>)})}
+            </>
         )
     }
 
