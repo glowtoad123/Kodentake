@@ -17,9 +17,11 @@ function Accountinfo(){
     const [chosenId, setchosenId] = useState("")
     const [refid, setrefid] = useState("")
     const [userName, setuserName] = useState("")
+    const [offlineuserName, setofflineuserName] = useState("")
     const [urlName, seturlName] = useState("")
     const [yourWorks, setyourWorks] = useState("")
     const [receivedKey, setreceivedKey] = useState("")
+    const [offlinereceivedKey, setofflinereceivedKey] = useState("")
     const [altId, setaltId] = useState("")
     const [spaceCheck, setspaceCheck] = useState(true)
     const [networkStatus, setnetworkStatus] = useState(false)
@@ -40,13 +42,13 @@ function Accountinfo(){
 
     userName.length === 0 && serverClient.query(
         q.Get(q.Ref(q.Collection("Accounts"), userId))
-    ).then(ret => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
+    ).then(ret => {setuserName(ret.data.username); localForage.setItem("offlineuserName", ret.data.username); localForage.setItem("offlinereceivedKey", ret.data.password); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
         serverClient.query(
             q.Get(q.Match(q.Index("dublicateUsername"), userId))
-        ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
+        ).then((ret, Index) => {setuserName(ret.data.username); localForage.setItem("offlineuserName", ret.data.username); localForage.setItem("offlinereceivedKey", ret.data.password); setreceivedKey(ret.data.password); setnetworkStatus(true)}, (err) => {
             serverClient.query(
                 q.Get(q.Match(q.Index("dublicateUsername"), altId))
-            ).then((ret, Index) => {setuserName(ret.data.username); setreceivedKey(ret.data.password); setnetworkStatus(true)})
+            ).then((ret, Index) => {setuserName(ret.data.username); localForage.setItem("offlineuserName", ret.data.username); localForage.setItem("offlinereceivedKey", ret.data.password); setreceivedKey(ret.data.password); setnetworkStatus(true)})
         })
     })
 
@@ -61,9 +63,15 @@ function Accountinfo(){
         q.Get(q.Match(q.Index("dublicateUsername"), userName))
     ).then((ret, Index) => {setrefid(ret.ref.id)})*/
 
-    if (!foragedData && yourWorks === receivedKey) {localForage.getItem("accountProjects").then(project => {setindexedArray(project); setforagedData(true)}).then(
-        ret => console.log("got data")
-    ).catch(err => console.log(err))}
+    if (!foragedData && yourWorks !== offlinereceivedKey) {
+        localForage.getItem("accountProjects").then(project => {setindexedArray(project); setforagedData(true)}).then(
+            ret => console.log("got data")
+        ).catch(err => console.log(err))
+        
+        localForage.getItem("offlineuserName").then(user => setofflineuserName(user))
+
+        localForage.getItem("offlinereceivedKey").then(thekey => setreceivedKey(thekey))
+    }
     const taggies = projectsArray.map(current => current.Categories)
 
     var tagArray = []
@@ -178,6 +186,10 @@ function Accountinfo(){
                  href={`/accountPage?title=${userId}`}><a href="/accountPage"><img src="/edit.svg" className={styles.save} onClick={updateName}/></a></Link>}
                 
             </div>
+            {!networkStatus && offlineuserName !== null &&  <div className={styles.head}>
+                                                                <h1 className={styles.displaytitle}><strong>{offlineuserName}</strong></h1>                
+                                                            </div>
+            }
             <div>
                 {networkStatus && projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
                     <Link href={`/project?title=${Current.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
@@ -203,7 +215,7 @@ function Accountinfo(){
                     <p className={styles.creatorName}><strong>{Current.Creator}</strong></p>
                     <br />
                     <div className={styles.tagDiv}>{tagArray[index].map(each => <Tag tag={each}/>)}</div>
-                    {yourWorks === receivedKey && (<div className={styles.projectFooter}>
+                    {yourWorks === offlinereceivedKey && (<div className={styles.projectFooter}>
                         <img src="/offline.svg" className={styles.delete} />
                         <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
                         <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
