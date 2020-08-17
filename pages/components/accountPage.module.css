@@ -29,6 +29,15 @@
 .descriptionDiv {
     background-color: #CAD2C5;
     height: 200px;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+}
+
+.descriptionDiv:hover {
+    background-color: #CAD2C5;
+    height: 200px;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -103,9 +112,9 @@
                 vertical-align: middle;
 }
 
-.description {
+/* .description {
     background-color: #ffffff;
-}
+} */
 
 .textHead {
     background-color: #b3c1b1;
@@ -176,6 +185,16 @@
     margin: 12px;
     border: none;
     border-radius: 6px;
+    overflow-x: hidden;
+    flex-direction: row;
+}
+
+.userDisplayTags:hover {
+    display: inline;
+    color: black;
+    margin: 12px;
+    border: none;
+    border-radius: 6px;
     overflow-x: scroll;
     flex-direction: row;
 }
@@ -221,12 +240,25 @@
 }
 
 .tagDiv {
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+.tagDiv:hover {
     overflow-x: scroll;
     display: flex;
     flex-direction: row;
 }
 
 .changeDiv {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.changeDiv:hover {
     overflow-x: scroll;
     overflow-y: scroll;
     display: flex;
@@ -234,6 +266,12 @@
 }
 
 .updateList {
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.updateList:hover {
     overflow-x: scroll;
     display: flex;
     flex-direction: row-reverse;
