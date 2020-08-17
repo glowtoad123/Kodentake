@@ -30,6 +30,7 @@
     background-color: #CAD2C5;
     height: 200px;
     overflow-y: hidden;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     vertical-align: middle;
@@ -39,6 +40,7 @@
     background-color: #CAD2C5;
     height: 200px;
     overflow-y: scroll;
+    overflow-x: scroll;
     display: flex;
     flex-direction: column;
     vertical-align: middle;

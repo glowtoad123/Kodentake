@@ -13,7 +13,6 @@ function Updateproject(){
     useEffect(() => {
         setrefid(sessionStorage.getItem("ref"));
         setusername(sessionStorage.getItem("username"));
-        setdataCondition("false")
         //setdataCondition(sessionStorage.getItem("dataCondition"))
     })
     console.log("refid: " + refid)
@@ -34,7 +33,7 @@ function Updateproject(){
     const [tagList, settagList] = useState([])
     const [linklist, setlinkList] = useState([])
     console.log(projectData)
-    dataCondition !== "true" && serverClient.query(
+    dataCondition === "false" && serverClient.query(
             q.Get(q.Ref(q.Collection('Projects'), refid))
         )
         .then((ret) => {setProjectData(ret.data); setdataCondition("true"); setlinkList(ret.data.Links); settagList(ret.data.Categories); console.log(ret.data)})
