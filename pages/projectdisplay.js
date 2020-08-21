@@ -7,7 +7,6 @@ import Link from 'next/link'
 import styles from './components/accountPage.module.css'
 import url from 'url'
 import { getURL } from 'next/dist/next-server/lib/utils'
-import { openDB, deleteDB, wrap, unwrap } from 'idb'
 import * as localForage from "localforage"
 
 

@@ -4,18 +4,28 @@ import faunadb, { query as q } from "faunadb"
 import styles from "./components/NewProject.module.css"
 import Link from 'next/link'
 import Navbar from './navbar'
+import { getURL } from 'next/dist/next-server/lib/utils'
 
 function Updateproject(){
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
-    const [refid, setrefid] = useState("")
+    /* const [refid, setrefid] = useState("") */
     const [username, setusername] = useState("")
+    const [fullUrlId, setFullUrlId] = useState("")
+    const [receivedKey, setreceivedKey] = useState("")
+    const [yourWorks, setyourWorks] = useState("")
+    const [authenCheck, setauthenCheck] = useState(false)
     const [dataCondition, setdataCondition] = useState("false")
     useEffect(() => {
-        setrefid(sessionStorage.getItem("ref"));
+        setFullUrlId(getURL())
+        /* setrefid(sessionStorage.getItem("ref")); */
         setusername(sessionStorage.getItem("username"));
+        setyourWorks(sessionStorage.getItem("yourWorks"))
         //setdataCondition(sessionStorage.getItem("dataCondition"))
     })
-    console.log("refid: " + refid)
+
+    const urlId = fullUrlId.slice(21, fullUrlId.length)
+    console.log('urlId: ' + urlId)
+    //console.log("refid: " + refid)
     console.log(username)
     const [projectData, setProjectData] = useState({
         Project_Title: "",
@@ -33,8 +43,13 @@ function Updateproject(){
     const [tagList, settagList] = useState([])
     const [linklist, setlinkList] = useState([])
     console.log(projectData)
-    dataCondition === "false" && serverClient.query(
+    /* dataCondition === "false" && serverClient.query(
             q.Get(q.Ref(q.Collection('Projects'), refid))
+        )
+        .then((ret) => {setProjectData(ret.data); setdataCondition("true"); setlinkList(ret.data.Links); settagList(ret.data.Categories); console.log(ret.data)}) */
+
+        dataCondition === "false" && serverClient.query(
+            q.Get(q.Ref(q.Collection('Projects'), urlId))
         )
         .then((ret) => {setProjectData(ret.data); setdataCondition("true"); setlinkList(ret.data.Links); settagList(ret.data.Categories); console.log(ret.data)})
     
@@ -53,6 +68,12 @@ function Updateproject(){
     //const [tagList, settagList] = useState(projectData.Categories)
     //const tagList = projectData.Categories
         console.log(tagList)
+            console.log(projectData)
+        console.log("Creator: " + Creator)
+
+    !authenCheck && serverClient.query(
+        q.Get(q.Match(q.Index("dublicateUsername"), Creator))
+    ).then(ret => {console.log(ret), setreceivedKey(ret.data.password), setauthenCheck(true)})
     function settingData(event){
         const name = event.target.name
         console.log(event.target.name)
@@ -174,8 +195,11 @@ function Updateproject(){
         setversion(event.target.value)
     }
 
+    console.log("yourWorks: " + yourWorks)
+    console.log("receivedKey: " + receivedKey)
+
     return(
-        <div><Navbar /><form id={styles.npform} >
+        yourWorks === receivedKey && <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
             <input className={styles.newProjectItem} onChange={settingData} name="Repository"       value={Repository}     placeholder=" Repository"     id={styles.Repository}      ></input>
@@ -208,6 +232,7 @@ function Updateproject(){
             <div className={styles.updateList}>{Update.length > 0 && Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2>Version {current.Version}</h2><h3 className={styles.changelogLabel}>Changelog</h3><br />{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div>)})}</div>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
+        
     )
 }
 

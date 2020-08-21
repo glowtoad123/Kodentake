@@ -80,6 +80,9 @@ function Accountinfo(){
         tagArray = indexedArray.map(project => project.Categories)
     }
 
+    console.log(worksIdArray)
+    console.log(taggies)
+
 
     function updateName(event){
 
@@ -202,7 +205,7 @@ function Accountinfo(){
                     <div className={styles.tagDiv}>{taggies[index].map(each => <Tag tag={each}/>)}</div>
                     {yourWorks === receivedKey && (<div className={styles.projectFooter}>
                         <img name={Current.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
-                        <Link href="/updateProject"><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+                        <Link href={`/updateProject?title=${worksIdArray[index]}`}><a href="/updateProject" className={styles.edit}><img id={Current.Id} onClick={setRef} title={Current.description} name={Current.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
                     </div>)}
                 </div>)})}
 
