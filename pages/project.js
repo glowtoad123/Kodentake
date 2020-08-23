@@ -16,6 +16,8 @@ export default (() => {
     const [projectInfo, setprojectInfo] = useState("")
     const [altId, setaltId] = useState("")
     const [spaceCheck, setspaceCheck] = useState(true)
+    const [authenCheck, setauthenCheck] = useState(false)
+    const [creatorId, setCreatorId] = useState("")
     const [chosenId, setchosenId] = useState("")
     const [Links, setLinks] = useState([])
     const [Roadmap, setRoadmap] = useState([])
@@ -38,7 +40,7 @@ export default (() => {
 
     projectInfo.length === 0 && serverClient.query(
         q.Get(
-        q.Match(q.Index("Project_Title"), urlShort)
+        q.Ref(q.Collection("Projects"), urlShort)
     )).then((ret, index) => {console.log(ret); setprojectInfo(ret.data); setCreator(ret.data.Creator); setLinks(ret.data.Links); setRoadmap(ret.data.Roadmap); setCategories(ret.data.Categories); setUpdate(ret.data.Update)}, (err) => {
         serverClient.query(
             q.Get(
@@ -53,6 +55,10 @@ export default (() => {
     ).then(ret => {setreceivedKey(ret.data.password)})
 
     console.log(receivedKey)
+
+    !authenCheck && serverClient.query(
+        q.Get(q.Match(q.Index("dublicateUsername"), Creator))
+    ).then(ret => {console.log(ret), setCreatorId(ret.ref.id), setauthenCheck(true)})
 
     function setRef(event){
         serverClient.query(
@@ -108,11 +114,11 @@ export default (() => {
         <div className={styles.userDisplay}>
             <Navbar />
             <h1 className="displaytitle"><strong>{projectInfo.Project_Title}</strong></h1>
-            {yourWorks === receivedKey && <div><Link href="/updateProject"><a href="/updateProject"><img id={projectInfo.Id} onClick={setRef} title={projectInfo.description} name={projectInfo.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
+            {yourWorks === receivedKey && <div><Link href={`/updateProject?title=${urlShort}`}><a href="/updateProject"><img id={projectInfo.Id} onClick={setRef} title={projectInfo.description} name={projectInfo.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
             <img name={projectInfo.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>}
             <br />
             <br />
-            <Link href={`/accountPage?title=${projectInfo.Creator}`}><a className={styles.creatorName}><strong>{projectInfo.Creator}</strong></a></Link>
+            <Link href={`/accountPage?title=${creatorId}`}><a className={styles.creatorName}><strong>{projectInfo.Creator}</strong></a></Link>
             <br />
             <a className={styles.respository} href={projectInfo.Repository}>{projectInfo.Repository}</a>
             <br />

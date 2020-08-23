@@ -13,6 +13,7 @@ import * as localForage from "localforage"
 function Display(){
     const [projectArray, setProjectArray] =  useState([])
     const [indexedArray, setindexedArray] = useState([])
+    const [worksIdArray, setworksIdArray] = useState([])
     const [networkStatus, setnetworkStatus] = useState(false)
     const [foragedData, setforagedData] = useState(false)
     //const [receivedKeys, setreceivedKeys] = useState([])
@@ -35,6 +36,7 @@ function Display(){
     ).then(ret => {
         setProjectArray(ret.data.map(project => project.data)), 
         console.log(ret.data.map(project => project.data),
+        setworksIdArray(ret.data.map(work => work.ref.id)),
         localForage.setItem("projectList", ret.data.map(project => project.data)).then(ret => console.log("has been set")).catch(err => console.log(err)),
         setnetworkStatus(true)
         )})
@@ -150,7 +152,7 @@ function Display(){
         return(
             <>
             {networkStatus && projectArray.map((project, index) => {return (<div className={styles.display}>
-                <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
+                <Link href={`/project?title=${worksIdArray[index]}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
                 <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
                 <br />
                 <br />

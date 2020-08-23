@@ -135,7 +135,7 @@ function Updateproject(){
         console.log(Categories)
         serverClient.query(
             q.Update(
-              q.Ref(q.Collection('Projects'), refid),
+              q.Ref(q.Collection('Projects'), urlId),
               { data: projectData },
             )
           )
@@ -199,7 +199,7 @@ function Updateproject(){
     console.log("receivedKey: " + receivedKey)
 
     return(
-        yourWorks === receivedKey && <div><Navbar /><form id={styles.npform} >
+        yourWorks === receivedKey ? <div><Navbar /><form id={styles.npform} >
             <input type="text" className={styles.newProjectItem} onChange={settingData} name="Project_Title"     value={Project_Title}   placeholder=" Project Title"   id={styles.Project_Title}    ></input>
             <textarea className={styles.newProjectItem} onChange={settingData} name="Description"       value={Description}     placeholder=" Description"     id={styles.Description}      ></textarea>
             <input className={styles.newProjectItem} onChange={settingData} name="Repository"       value={Repository}     placeholder=" Repository"     id={styles.Repository}      ></input>
@@ -232,6 +232,7 @@ function Updateproject(){
             <div className={styles.updateList}>{Update.length > 0 && Update.map((current, index) => {return (<div className={styles.update} /*onClick={() => removeUpdate(index)}*/><h2>Version {current.Version}</h2><h3 className={styles.changelogLabel}>Changelog</h3><br />{changeLog[index].map(one => <p className={styles.tags}><strong>{one}</strong></p>)}</div>)})}</div>
             <Link href="/projectdisplay"><a href="/projectdisplay"><button id={styles.submit} onClick={saveData} type="submit">Save</button></a></Link>
         </form></div>
+        : <div>Access has been denied because you are not the creator of this project</div>
         
     )
 }

@@ -37,7 +37,8 @@ function Accountinfo(){
     })
 
     const userId = urlName.slice(19, urlName.length)
-    userId.includes("%20") && spaceCheck ? (setspaceCheck(false), setaltId(userId.replace("%20", " "))) : console.log("all good")
+    //userId.includes("%20") && spaceCheck ? (setspaceCheck(false), setaltId(userId.replace("%20", " "))) : console.log("all good")
+    userId.includes("%20") && spaceCheck ? (setspaceCheck(false), setaltId(userId.split("%20").join(" "))) : console.log("all good")
     console.log(altId)
 
     userName.length === 0 && serverClient.query(
