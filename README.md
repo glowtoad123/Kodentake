@@ -1,30 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Codentake
 
-## Getting Started
+A Progressive Web App that will allow users to display their projects and what techniques, frameworks, and languages they used.
 
-First, run the development server:
+This was built using the following:
+- reactjs
+- Nextjs
+- FaunaDB
+- icons from flaticon and customized by me to match Codentake's color scheme
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+[Link to deployed site](https://codentake.vercel.app)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Instructions to run dev version:**
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+open your terminal and run
 
-## Learn More
+`git clone https://github.com/glowtoad123/codentake`
 
-To learn more about Next.js, take a look at the following resources:
+`cd codentake`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`yarn install`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`yarn run dev`
 
-## Deploy on Vercel
+then open http://localhost:3000 in your browser to see the results
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![account page](https://mfrkia.bn.files.1drv.com/y4mx9Ivp7gWYVk-Vm63NX2_3jCtvdDXxOMeMYRr3WHdXZMzU1kGutdYRfwvKvzvuEPNeOz7VzzQi5zLISCFiyba98Vkm1K3s3V4kWBfEPNBmhHR_uC63QqE14XQP3fXC00kMKVqMUWF3nzIURMC4_bEUIt0xbEl5t3uX-guCZJrjDLpe_NXJxmzhFvGy71R7XxazG9XENjWc3rlNcT_3Hv0ng?width=1366&height=768&cropmode=none)
+![main page](https://mfreia.bn.files.1drv.com/y4mMZeIRw07gPnvU0vFcTTFFM415FCD4CJpohvO9XLzTDo7Oy-zcuXfjXSG0-gp7MIBr155pefWDHhV1TclOFq6_SKubYBEp0w1NXzT_V40wUlbFFHdQ7nSvbyiwU08WHdT1oQ0yMvifymdkV5KADqH42S1_OZ4wOoDf1leQh5CClRg0mCmEOkobtUtbJ2snyTHLc29dTYTKCFN1FtfV7ip0g?width=1366&height=768&cropmode=none)
+![create page](https://mfrfia.bn.files.1drv.com/y4mXqNCmeUQWuu6WriszKUpLHb1Mq5lpfQFZd1zRQZf_tqnAd-IUd1KaT-c2CqHX0RHJNGAcnazB1wBl0ndbL6klZbvUnjoFifaFtT-LceUw9CA5pGL7iZQbCJJC7ErFZmxCbdpZLiqx9vBB0T_KATz3CtVcnzbaqnbHLKVUNXn7vOiDyqPb8whdXZZPZ_k-djVQOaGszeu4HmgppC-my3rgA?width=1366&height=768&cropmode=none)
+![search page](https://mvrnia.bn.files.1drv.com/y4m18b_V6ljmgmmHUz8_4ZLexNrtfUCCWX58CrzmAXba4v0tqJSXKJRY1VQdUdTjX6Cpzl_RrCUklUOk1oOIV2EblzdUu1R1N_npF0SzL3e6fq3yo2430dxUJNX6Uqs5qAj7Cj3Pz1kRxRTluqDSDIVNHDTxgKZljMr5ptck8RQgSWHTtlBQYAmnD7k7_ldShcPFjfElXNdFIXrrD34ArYcGQ?width=1366&height=768&cropmode=none)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
