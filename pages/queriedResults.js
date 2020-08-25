@@ -77,6 +77,8 @@ export default () => {
     return (
         <div>
             <Navbar />
+            <h1 className={styles.textHead} style={{margin: "0"}}>Search Results</h1>
+            <br />
             {queriedList.map((project, index) => {return (<div className={styles.display}>
                 <Link href={`/project?title=${project.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{project.Project_Title}</strong></h1></a></Link>
                 <div className={styles.descriptionDiv}><strong >{project.Description}</strong></div>
