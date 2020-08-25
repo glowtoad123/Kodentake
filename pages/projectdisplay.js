@@ -220,7 +220,7 @@ function Display(){
             <br />
             <div className="searchdiv">
                 <div className={styles.list}>
-                    <label className="searchLabel">Tags search Values</label>
+                    <label className="searchLabel">Categories search List</label>
                     {searchTagsList.map(each => <Tag tag={each}/>)}
                 </div>
             </div>    
