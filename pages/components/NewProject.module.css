@@ -1,0 +1,166 @@
+#npform {
+    background-color: #cad2c5;
+    width: 500px;
+    margin: auto;
+    border-radius: 12px 12px 0 0;
+}
+
+#Project_Title {
+    width: inherit;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    font-size: 32px;
+}
+
+    #Project_Title::placeholder {
+        text-align: center;
+    }
+
+#Version_num {
+    text-align: left;
+    width: 143px;
+}
+
+    #Version_num::placeholder {
+        text-align: left;
+    }
+
+#Description {
+    width: inherit;
+    height: 107px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 0;
+}
+
+#Categories {
+    width: 198px;
+    height: 41px;
+    display: inline;
+    margin-right: 10px
+}
+
+#Repository {
+    width: 300px;
+    height: 41px;
+    display: inline;
+    margin-right: 10px
+}
+
+.tagsDiv {
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+}
+
+.tags {
+    display: inline-block;
+    flex-direction: row;
+    background-color: #84a98c;
+    color: black;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 12px;
+    border: none;
+    border-radius: 6px;
+    width: max-content;
+}
+
+#addCategory {
+    display: inline;
+    border: none;
+    border-radius: 12px;
+    background-color: #2f3e46;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+    #addCategory:active {
+        box-shadow: none;
+    }
+
+#addUpdate {
+    border: none;
+    border-radius: 6px;
+    background-color: #2f3e46;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+#Roadmap {
+    width: inherit;
+    height: 177px; 
+    border-radius: 0;
+}
+
+#Changes {
+    width: inherit;
+    height: 177px;
+    border-radius: 0;
+
+}
+
+.versionDiv {
+    background-color: #b3c1b1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: max-content;
+}
+
+.newProjectItem {
+    display: block;
+    background: white;
+    color: #2F4F4F;
+    margin-bottom: 20px;
+    display: block;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    padding: 0px;
+}
+
+#submit {
+    background-color: #2f3e46;
+    color: white;
+    border: none;
+    /* border-radius: 12px 12px 0 0; */
+    border-radius: 0 0 12px 12px;
+    padding: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    vertical-align: middle;
+    width: 500px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+.updateList {
+        overflow-x: scroll;
+        display: flex;
+        flex-direction: row;
+}
+
+.update {
+    background-color: #b3c1b1;
+    margin: 10px;
+    padding: 10px;
+    padding-left: 0;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.changelogLabel {
+    background-color: #96a194;
+    display: inline-block;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0 6px 6px 0;
+    font-size: 20px;
+}
+
