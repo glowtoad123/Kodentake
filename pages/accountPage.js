@@ -196,7 +196,7 @@ function Accountinfo(){
             }
             <div>
                 {networkStatus && projectsArray.map((Current, index) => {const Categories = Current.Categories; return (<div className={styles.display}>
-                    <Link href={`/project?title=${Current.Project_Title}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
+                    <Link href={`/project?title=${worksIdArray[index]}`}><a><h1 className={styles.displaytitle}><strong>{Current.Project_Title}</strong></h1></a></Link>
                     <div className={styles.descriptionDiv}><strong >{Current.Description}</strong></div>
                     <br />
                     <br />

@@ -3,6 +3,7 @@ import faunadb, { query as q } from "faunadb"
 import crypto from 'crypto'
 import styles from './components/Enter.module.css'
 import Link from 'next/link'
+import * as localForage from "localforage"
 
 const hash = crypto.createHash('sha256')
 
@@ -15,15 +16,7 @@ function Enter(props){
 
   function Login(){
 
-    //var adminClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
     var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
-    /*adminClient.query(
-        q.CreateKey({
-          database: q.Database('Codentake'),
-          role: 'server',
-        })
-      )
-      .then((ret) => console.log(ret))*/
 
       const [account, setAccount] = useState({
           password: "",
@@ -60,33 +53,36 @@ function Enter(props){
       hash.update(hashedPassword)
       const alphaPassword = hash.digest("hex")
       console.log("alphaPassword: " + alphaPassword)
-    
-    
-      /*crypto.pbkdf2(alphaPassword, 'salt', 1, 64, 'sha512', (err, derivedKey) => {
-        if (err) throw err;
-        setEnhancedPassword(derivedKey.toString('hex'))
-      })*/
       
       crypto.pbkdf2(alphaPassword, 'salt', 10, 64, 'sha512', (err, derivedKey) => {
-        if (err) throw err;
-        setEnhancedPassword(derivedKey.toString('hex'))
+          if (err) throw err;
+          setEnhancedPassword(derivedKey.toString('hex'))
 
-        console.log("username: " + username)
-        console.log("password: " + password)
-        console.log("enhancedPassword: " + derivedKey.toString('hex'))
-      
-      serverClient.query(
-        q.Get(
-          q.Match(q.Index('account'), derivedKey.toString('hex'), username)
-        )
-      )
-      .then((ret) => (console.log(ret.data.username), setInfo(ret.data.username), sessionStorage.setItem("yourWorks", ret.data.password), sessionStorage.setItem("userId", ret.ref.id), sessionStorage.setItem("username", ret.data.username), setHasLoggedIn((current) => {return !current})), (err) => {
-        alert("sorry, but you've either entered the wrong password or the wrong username");
-        sessionStorage.removeItem("username")
+          console.log("username: " + username)
+          console.log("password: " + password)
+          console.log("enhancedPassword: " + derivedKey.toString('hex'))
         
-      })
+        serverClient.query(
+          q.Get(
+            q.Match(q.Index('account'), derivedKey.toString('hex'), username)
+          )
+        )
+        .then((ret) => (
+                        console.log(ret.data.username),
+                        setInfo(ret.data.username),
+                        sessionStorage.setItem("yourWorks", ret.data.password),
+                        sessionStorage.setItem("userId", ret.ref.id),
+                        sessionStorage.setItem("username", ret.data.username),
+                        setHasLoggedIn((current) => {return !current}),
+                        localForage.setItem("userId", ret.ref.id)
+                      ), 
+              (err) => {
+                alert("sorry, but you've either entered the wrong password or the wrong username... but we'll let you in without your account anyways so that you can see some projects");
+                sessionStorage.removeItem("username")
+              }
+            )
     
-    })
+      })
     }
 
     console.log("enhancedPassword: " + enhancedPassword);

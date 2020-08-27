@@ -87,14 +87,7 @@ export default (() => {
 
     }
 
-    //const {Project_Title, Id, Repository, Links, Description, Roadmap, Creator, Categories, Update} = projectInfo
-
-    /* const changeLog = Update.map(project => project.Changes) */
-
-    /* const Categories = projectInfo.Categories
-    const Links = projectInfo.Links
-    const Roadmap = projectInfo.Roadmap
-    const Update = projectInfo.Update */
+    
 
     const changeLog = Update.map(one => one.Changes)
 
@@ -115,7 +108,16 @@ export default (() => {
             <Navbar />
             <h1 className="displaytitle"><strong>{projectInfo.Project_Title}</strong></h1>
             {yourWorks === receivedKey && <div><Link href={`/updateProject?title=${urlShort}`}><a href="/updateProject"><img id={projectInfo.Id} onClick={setRef} title={projectInfo.description} name={projectInfo.Project_Title} className={styles.edit} src='/edit.svg' /></a></Link>
-            <img name={projectInfo.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/></div>}
+                                               <img name={projectInfo.Project_Title} src="/delete.svg" className={styles.delete} onClick={deleteProject}/>
+                                          </div>
+            }
+            <div className={styles.inquisite}>
+                <svg className={styles.withininquisite} id="inquisiting" width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                    <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                </svg>
+                <label className={styles.withininquisite} type="text">become an inquisitor</label>
+            </div>
             <br />
             <br />
             <Link href={`/accountPage?title=${creatorId}`}><a className={styles.creatorName}><strong>{projectInfo.Creator}</strong></a></Link>
