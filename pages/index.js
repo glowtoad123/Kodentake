@@ -7,20 +7,19 @@ import Display from './projectdisplay'
 
 export default function Home() {
 
-  const [username, setusername] = useState()
+  const [username, setusername] = useState(false)
 
   useEffect(() => {
     const getusername = sessionStorage.getItem("username")
-    console.log("getusername: " + getusername);
     if(getusername){
-      setusername(getusername)
+      setusername(true)
     }
   }
 )
 
   return (
     <div>
-      {!username ? <Enter /> : <Display />}
+      {username ? <Enter /> : <Display />}
     </div>
 
   )

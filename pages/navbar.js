@@ -5,20 +5,29 @@ import Link from 'next/link'
 function Navbar(){
     function Navprop(props){
         return(
-            <div title={props.description} >
+            <div style={{
+                    display: 'block',
+                    arrangeItems: "center",
+                    justifyContent: "center",
+                    margin: 'auto',
+                    
+                 }} title={props.description} >
                 <img style={{
-                    width: '48px', 
-                    height: '48px',
-                    marginRight: '20px',
+                        width: '48px', 
+                        height: '48px',
+                        marginRight: "10px",
+                        horizontalAlign: "middle",
                     }} title={props.description} className="navpic" src={props.pic} />
                 <div style={{
-                    display: 'inline-block',
-                    fontSize: "16px",
-                    position: 'relative',
-                    bottom: '15px',
-                    backgroundColor: "#2f3e46",
-                    borderRadius: "6px",
-                    color: "white"
+                        display: 'inline-block',
+                        fontSize: "16px",
+                        position: 'relative',
+                        bottom: '15px',
+                        backgroundColor: "#2f3e46",
+                        borderRadius: "6px",
+                        color: "white",
+                        margin: "auto",
+                        horizontalAlign: "middle",
                     }} title={props.description}><strong title={props.description}>{props.description}</strong></div>
             </div>
         )
@@ -33,42 +42,44 @@ function Navbar(){
       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
       position: "fixed",
       right: "0",
-      top: "0",
       zIndex: "2",
-      display: "inline-block",
+      display: "block",
+      margin: "auto"
     }
 
-    const [currentScrollPos, setCurrentScrollPos] = useState("")
-    const [hasMoved, setHasMoved] = useState(true)
+    
     const [username, setusername] = useState("")
     const [userId, setuserId] = useState("")
-    useEffect(() => {var prevScrollPos = window.pageYOffset;
-    window.onscroll = function() {
-        var currentScrollPos = window.pageYOffset;
-        if (prevScrollPos > currentScrollPos) {
-          setHasMoved(current => false);
-        } else {
-          setHasMoved(true)
-        }
-        prevScrollPos = currentScrollPos;
-    }, 
+    const [navCheck, setNavCheck] = useState(false)
+    useEffect(() => {
     sessionStorage.getItem("username") && setusername(sessionStorage.getItem("username"))
     sessionStorage.getItem("userId") && setuserId(sessionStorage.getItem("userId"))
+
+
 })
-    hasMoved && (NavbarStyle.display = "none")
-    !hasMoved && (NavbarStyle.display = "inline-block")
+
+    function toggleNav() {
+        setNavCheck(current => !current)
+    }
 
     return(
-        <div className="styles.navbar" style={NavbarStyle}>
-            <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="projects" /></a></Link>
-            <Link href="/newProject"><a href="/newProject"><Navprop pic='/plus.svg' description="add" /></a></Link>
-            {userId.length > 0 && <Link href={`/accountPage?title=${userId}`}><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>}
-            <Link href="/enter"><a href="/enter"><Navprop pic='/login.svg' description="login/switch account" /></a></Link>
-            {/*<Link href="/accountPage"><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>
-            <Navprop pic='/favorite.svg' description="favorites" />
-            <Navprop pic='/notification.svg' description="updates" />
-            <Navprop pic='/settings.svg' description="settings" />*/}
-        </div>
+        <>
+            {navCheck && <div onClick={toggleNav} className="styles.navbar" style={NavbarStyle}>
+                <Link href="/projectdisplay"><a href="/projectdisplay"><Navprop pic="/book.svg" description="projects" /></a></Link>
+                <Link href="/newProject"><a href="/newProject"><Navprop pic='/plus.svg' description="add" /></a></Link>
+                {userId.length > 0 && <Link href={`/accountPage?title=${userId}`}><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>}
+                <Link href="/enter"><a href="/enter"><Navprop pic='/login.svg' description="login/switch account" /></a></Link>
+                {/*<Link href="/accountPage"><a href="/accountPage"><Navprop pic='/user.svg' description="my account" /></a></Link>
+                <Navprop pic='/favorite.svg' description="favorites" />
+                <Navprop pic='/notification.svg' description="updates" />
+                <Navprop pic='/settings.svg' description="settings" />*/}
+            </div>}
+            <img onClick={toggleNav} src="/navpreview.svg" style={{
+                position: 'fixed',
+                right: "0",
+                bottom: "0"
+            }}/>
+        </>
     )
 }
 
