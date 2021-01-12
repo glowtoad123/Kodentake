@@ -10,12 +10,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-            <title>Codentake</title>
+            <title>Kodentake</title>
             <link rel="manifest" href="manifest.json" />
             <meta name="mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="application-name" content="Codentake" />
-            <meta name="apple-mobile-web-app-title" content="Codentake" />
+            <meta name="application-name" content="Kodentake" />
+            <meta name="apple-mobile-web-app-title" content="Kodentake" />
             <meta name="theme-color" content="#2f3e46" />
             <meta name="msapplication-navbutton-color" content="#2f3e46" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

@@ -1,6 +1,6 @@
 {
-  "name": "Codentake",
-  "short_name": "Codentake",
+  "name": "Kodentake",
+  "short_name": "Kodentake",
   "description": "A webapp that will allow users to display their projects and what techniques, frameworks, and languages they used",
   "lang": "en-US",
   "start_url": "/",

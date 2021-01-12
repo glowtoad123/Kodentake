@@ -116,7 +116,7 @@ function Enter(props){
       var serverClient = new faunadb.Client({ secret: 'fnADpgTNT1ACEiUC4G_M5eNjnIPvv_eL99-n5nhe' });
       /*adminClient.query(
           q.CreateKey({
-            database: q.Database('Codentake'),
+            database: q.Database('Kodentake'),
             role: 'server',
           })
         )

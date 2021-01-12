@@ -1,4 +1,4 @@
-# Codentake
+# Kodentake
 
 A Progressive Web App that will allow users to display their projects and what techniques, frameworks, and languages they used.
 
@@ -6,17 +6,17 @@ This was built using the following:
 - reactjs
 - Nextjs
 - FaunaDB
-- icons from flaticon and customized by me to match Codentake's color scheme
+- icons from flaticon and customized by me to match Kodentake's color scheme
 
-[Link to deployed site](https://codentake.vercel.app)
+[Link to deployed site](https://kodentake.vercel.app)
 
 **Instructions to run dev version:**
 
 open your terminal and run
 
-`git clone https://github.com/glowtoad123/codentake`
+`git clone https://github.com/glowtoad123/kodentake`
 
-`cd codentake`
+`cd kodentake`
 
 `yarn install`
 
